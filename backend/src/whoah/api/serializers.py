@@ -5,9 +5,10 @@ from rest_framework import serializers
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 
-
+# Register Serializer
 class RegisterUserSerializer(serializers.ModelSerializer):
 
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True) # cuz it is not part of model field
@@ -45,9 +46,9 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         )
 
         return user
-
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL) # creating token for every new user
+   
+# creating token for every new user registered.
+@receiver(post_save, sender=settings.AUTH_USER_MODEL) 
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)

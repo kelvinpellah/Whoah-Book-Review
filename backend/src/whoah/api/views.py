@@ -3,8 +3,11 @@ from rest_framework import status
 from rest_framework import viewsets
 from django.contrib.auth.models import User
 from rest_framework.response import Response
+from rest_framework import generics
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.authtoken.views import ObtainAuthToken
 
-
+# Register viewset
 class RegisterUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = RegisterUserSerializer
@@ -18,4 +21,11 @@ class RegisterUserViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+
+# Login viewset
+class LoginViewset(viewsets.ViewSet):
+    serializer_class = AuthTokenSerializer
+
+    def create(self, request):
+        return ObtainAuthToken().post(request)        
 
