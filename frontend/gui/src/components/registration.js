@@ -2,7 +2,22 @@ import React from 'react';
 import {Link} from "react-router-dom";
 
 
+// Check password strength
+function PasswordStrength(props) {
 
+    let length_password = props.values.length;
+    let password_input = props.values;
+
+    if (password_input === ''){
+        return null
+    }
+    else {
+        return(
+        <p>Password is {length_password < 6 ? 'weak' : 'strong'}</p>
+        );
+    }
+    
+}
 class RegistrationForm extends React.Component {
 
     constructor(props){
@@ -38,6 +53,9 @@ class RegistrationForm extends React.Component {
                     <input type="text" id="username" name="username" value={this.state.credentials.username} onChange={this.InputChange}/><br />
                     <label htmlFor="password">Password</label>
                     <input type="password" id="password" name="password" value={this.state.credentials.password} onChange={this.InputChange}/><br />
+                    <div>
+                        <PasswordStrength values={this.state.credentials.password}/>
+                    </div>
                     <label htmlFor="confirm_password">Confirm Password</label>
                     <input type="password" id="confirm_password" name="confirm_password" value={this.state.credentials.confirm_password} onChange={this.InputChange}/><br />
                     <label htmlFor="email">E-mail</label>
