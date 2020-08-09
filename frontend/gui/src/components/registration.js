@@ -58,6 +58,8 @@ class RegistrationForm extends React.Component {
 
         confirmPasswordError = `${this.state.credentials.password !== this.state.credentials.confirmPassword ? "Passwords don't match" : ""}`;
 
+        
+
         // Update state and Return the errors.
         if ( usernameError || passwordError || confirmPasswordError) {
             this.setState({usernameError, passwordError,confirmPasswordError });
