@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import axios from 'axios';
 
 // initial state
 
@@ -48,16 +49,45 @@ class LoginForm extends React.Component {
         return true;
     }
 
-    // form submission
+    // send data to server
 
-    handleSubmit = event => {
-        event.preventDefault();
-        const isValid = this.validateForm();
-        if(isValid) {
-            // Clear form after submission if correct
-            this.setState(initialState);
+    sendData = async () => {
+
+        var form = new FormData();
+
+        form.append('username', this.state.credentials.username);
+        form.append('password', this.state.credentials.password);
+
+        try {
+            let res = await axios({
+                method:'post',
+                url:'http://127.0.0.1:8000/api/login/',
+                data: form,
+                headers: {'Content-Type': 'multipart/form-data'}
+            })
+            console.log(res);
+        } catch (error) {
+            console.log(error)
         }
+
+
+}
+
+// Form submission
+
+handleSubmit = event => {
+    event.preventDefault();
+    const isValid = this.validateForm();
+    if (isValid) {
+        
+        //send data to REST API
+        this.sendData();
+        
+        // Clear form after successfully submission.
+        this.setState(initialState);
     }
+    
+}
      
 
     render() {
