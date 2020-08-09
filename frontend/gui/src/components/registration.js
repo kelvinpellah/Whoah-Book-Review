@@ -10,8 +10,10 @@ const initialState = {
         email:"",    
         confirmPassword:"",       
     },
+    usernameError:"",
     passwordError:"",    
-    confirmPasswordError:"",    
+    confirmPasswordError:"",
+        
     
 }
 class RegistrationForm extends React.Component {
@@ -40,20 +42,25 @@ class RegistrationForm extends React.Component {
     validateForm = () => {
         let passwordError = "";
         let confirmPasswordError ="";
+        let usernameError = "";
+        let passwordError1 = "";
+        let passwordError2 = "";
+       
+        // check username errors
+        usernameError = `${!this.state.credentials.username ? "Username can't be empty." : ""}`;
+        
+        // check password errors
+        passwordError1 = `${!this.state.credentials.password ? 'Password can\'t be empty.' : ""}`;
+        
+        passwordError2 = `${this.state.credentials.password.length < 6 ? "Password is too short. A minimum of six characters required." : ""}`;
+        
+        passwordError = `${passwordError1? passwordError1 : passwordError2}`;
 
-        // checking password for errors.
-
-        if (this.state.credentials.password.length < 6) {
-            passwordError = "Password is too short. A minimum of six characters required.";
-        }
-
-        if (this.state.credentials.password !== this.state.credentials.confirmPassword) {
-            confirmPasswordError = "Passwords don't match";
-        }
+        confirmPasswordError = `${this.state.credentials.password !== this.state.credentials.confirmPassword ? "Passwords don't match" : ""}`;
 
         // Update state and Return the errors.
-        if (passwordError || confirmPasswordError) {
-            this.setState({passwordError, confirmPasswordError });
+        if ( usernameError || passwordError || confirmPasswordError) {
+            this.setState({usernameError, passwordError,confirmPasswordError });
             return false;
         }
 
@@ -82,6 +89,9 @@ class RegistrationForm extends React.Component {
                     <h2>Please create your account.</h2>
                     <label htmlFor="username">Username</label>
                     <input type="text" id="username" name="username" value={this.state.credentials.username} onChange={this.inputChange}/><br />
+                    <div>
+                        {this.state.usernameError}
+                    </div>
                     <label htmlFor="password">Password</label>
                     <input type="password" id="password" name="password" value={this.state.credentials.password} onChange={this.inputChange}/><br />
                     <div>
