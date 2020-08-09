@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import axios from 'axios';
 
 // initial state
 
@@ -24,6 +25,7 @@ class RegistrationForm extends React.Component {
         
         this.inputChange = this.inputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.sendData = this.sendData.bind(this);
     }
     
     // Change state to specific field in case of input changes
@@ -66,7 +68,33 @@ class RegistrationForm extends React.Component {
             return false;
         }
 
+        // return true if no errors.
         return true;
+
+    }
+
+    // send data to server
+
+    sendData = async () => {
+
+            var form = new FormData();
+
+            form.append('username', this.state.credentials.username);
+            form.append('password', this.state.credentials.password);
+            form.append('confirmPassword', this.state.credentials.confirmPassword);
+            form.append('email', this.state.credentials.email);
+            try {
+                let res = await axios({
+                    method:'post',
+                    url:'http://127.0.0.1:8000/api/register/',
+                    data: form,
+                    headers: {'Content-Type': 'multipart/form-data'}
+                })
+                console.log(res);
+            } catch (error) {
+                console.log(error)
+            }
+
 
     }
     
@@ -76,7 +104,11 @@ class RegistrationForm extends React.Component {
         event.preventDefault();
         const isValid = this.validateForm();
         if (isValid) {
-            // Clear form after submission if correct
+            
+            //send data to REST API
+            this.sendData();
+            
+            // Clear form after successfully submission.
             this.setState(initialState);
         }
         
