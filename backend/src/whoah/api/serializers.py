@@ -11,11 +11,11 @@ from rest_framework.authtoken.models import Token
 # Register Serializer
 class RegisterUserSerializer(serializers.ModelSerializer):
 
-    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True) # cuz it is not part of model field
+    confirmPassword = serializers.CharField(style={'input_type': 'password'}, write_only=True) # cuz it is not part of model field
     
     class Meta:
         model = User
-        fields = ['id', 'username', 'password','email', 'password2']
+        fields = ['id', 'username', 'password','email', 'confirmPassword']
         extra_kwargs = {'password': {'write_only': True, 'required': True},'email':{'required':False}}
 
     def validate(self, data):
@@ -29,7 +29,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         if len(data['password']) < 6:
             raise serializers.ValidationError({'password':'Password is too short. Minimum 6 characters.'})
 
-        if data['password'] != data['password2']:
+        if data['password'] != data['confirmPassword']:
             raise serializers.ValidationError({'password': "Passwords don't match"})
 
         return data
