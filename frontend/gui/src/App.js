@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.css';
 import {BrowserRouter as Router} from 'react-router-dom';
-import BaseRouter from "./routes";
+import AppLayout from './containers/layout';
 
 function App() {
   return (
     <Router>
       <div className="App">
-          <BaseRouter />
+          <AppLayout />
       </div>
     </Router>
   );
