@@ -1,6 +1,10 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import axios from 'axios';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../mystyles.css';
+
 
 // initial state
 
@@ -25,6 +29,7 @@ class LoginForm extends React.Component {
         const cred = this.state.credentials;
         cred[event.target.name]=event.target.value;
         this.setState({credentials: cred});
+        console.log(cred)
         
     }
 
@@ -75,39 +80,40 @@ class LoginForm extends React.Component {
 
 // Form submission
 
-handleSubmit = event => {
-    event.preventDefault();
-    const isValid = this.validateForm();
-    if (isValid) {
+    handleSubmit = event => {
+        event.preventDefault();
+        const isValid = this.validateForm();
+        if (isValid) {
+            
+            //send data to REST API
+            this.sendData();
+            
+            // Clear form after successfully submission.
+            this.setState(initialState);
+        }
         
-        //send data to REST API
-        this.sendData();
-        
-        // Clear form after successfully submission.
-        this.setState(initialState);
     }
-    
-}
-     
 
-    render() {
+    render () {
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <h2>Welcome Back!</h2>
-                    <input type="text" placeholder="Username" name="username" value={this.state.credentials.username} onChange={this.inputChange}/><br />
-                    <div>
-                        {this.state.usernameError}
-                    </div>
-                    <input type="password" placeholder="Password" name="password" value={this.state.credentials.password} onChange={this.inputChange}/><br />
-                    <div>
-                        {this.state.passwordError}
-                    </div>
-                    <button type="submit"  >Login</button><br />
-                </form>
-                <p>Don't have an account?<Link to="/register">Sign Up</Link></p>
-            </div>
-        );
+        <div>
+            <Form inline onSubmit={this.handleSubmit}>
+                <Form.Group className="mr-2" controlId="Username">
+                    <Form.Control className="login_inputs" type="input" name="username" value={this.state.credentials.username} onChange={this.inputChange} placeholder="Username" />
+                </Form.Group>
+                <div>
+                    {this.state.usernameError}
+                </div>
+                <Form.Group className="mr-2" controlId="Password">
+                    <Form.Control className="login_inputs" type="password" name="password" value={this.state.credentials.password} onChange={this.inputChange} placeholder="Password" />
+                </Form.Group>
+                <div>
+                    {this.state.passwordError}
+                </div>
+                <Button className="login_button" type="submit">Sign in</Button>
+            </Form>
+        </div>
+        )
     }
 }
 

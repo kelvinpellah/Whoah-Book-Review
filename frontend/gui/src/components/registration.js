@@ -1,6 +1,10 @@
 import React from 'react';
-import {Link} from "react-router-dom";
 import axios from 'axios';
+import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../mystyles.css';
 
 // initial state
 
@@ -34,9 +38,7 @@ class RegistrationForm extends React.Component {
         const cred = this.state.credentials;
         cred[event.target.name]=event.target.value;
         this.setState({credentials: cred});
-        console.log(event.target.name);
-
-        
+        console.log(cred);
     }
 
     // Checking correctness of the form on submission
@@ -113,37 +115,42 @@ class RegistrationForm extends React.Component {
         }
         
     }
-     
 
-    render() {
+    render () {
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <h1>Welcome to Whoah!</h1>
-                    <h2>Please create your account.</h2>
-                    <label htmlFor="username">Username</label>
-                    <input type="text" id="username" name="username" value={this.state.credentials.username} onChange={this.inputChange}/><br />
-                    <div>
-                        {this.state.usernameError}
-                    </div>
-                    <label htmlFor="password">Password</label>
-                    <input type="password" id="password" name="password" value={this.state.credentials.password} onChange={this.inputChange}/><br />
-                    <div>
-                        {this.state.passwordError}
-                    </div>
-                    <label htmlFor="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" value={this.state.credentials.confirmPassword} onChange={this.inputChange}/><br />
-                    <div>
-                        {this.state.confirmPasswordError}
-                    </div>
-                    <label htmlFor="email">E-mail</label>
-                    <input type="email" id="email" name="email" value={this.state.credentials.email} onChange={this.inputChange}/><br />
-                    <button type="submit" >Sign Up</button><br />
-                </form>
-                <p>Already have an account?<Link to="/login">Sign in</Link></p>
-            </div>
-        );
+        <div>
+            <Container className="center aligned">
+            <Form onSubmit={this.handleSubmit}>
+                <h5>Welcome to Whoah!</h5>
+                <h6>Please create your account.</h6>
+                <Form.Group controlId="Username">
+                    <Form.Control className="register_inputs" type="input" name="username" value={this.state.credentials.username} onChange={this.inputChange} placeholder="Username" />
+                </Form.Group>
+                <div>
+                    {this.state.usernameError}
+                </div>
+                <Form.Group controlId="Password">
+                    <Form.Control className="register_inputs" type="password" name="password" value={this.state.credentials.password} onChange={this.inputChange} placeholder="Password" />
+                </Form.Group>
+                <div>
+                    {this.state.passwordError}
+                </div>
+                <Form.Group controlId="ConfirmPassword">
+                    <Form.Control className="register_inputs" type="password" name="confirmPassword" value={this.state.credentials.confirmPassword} onChange={this.inputChange} placeholder="Confirm Password" />
+                </Form.Group>
+                <div>
+                    {this.state.confirmPasswordError}
+                </div>
+                <Form.Group controlId="Email">
+                    <Form.Control className="register_inputs" type="email" name="email" value={this.state.credentials.email} onChange={this.inputChange} placeholder="Email Address" />
+                </Form.Group>
+                <Button className="register_button" type="submit">Sign Up</Button>
+            </Form>
+            </Container>
+        </div>
+        )
     }
+
 }
 
 export default RegistrationForm;
