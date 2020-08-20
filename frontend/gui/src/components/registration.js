@@ -126,19 +126,19 @@ class RegistrationForm extends React.Component {
                 <Form.Group controlId="Username">
                     <Form.Control className="register_inputs" type="input" name="username" value={this.state.credentials.username} onChange={this.inputChange} placeholder="Username" />
                 </Form.Group>
-                <div>
+                <div className='register_errors'>
                     {this.state.usernameError}
                 </div>
                 <Form.Group controlId="Password">
                     <Form.Control className="register_inputs" type="password" name="password" value={this.state.credentials.password} onChange={this.inputChange} placeholder="Password" />
                 </Form.Group>
-                <div>
+                <div className='register_errors'>
                     {this.state.passwordError}
                 </div>
                 <Form.Group controlId="ConfirmPassword">
                     <Form.Control className="register_inputs" type="password" name="confirmPassword" value={this.state.credentials.confirmPassword} onChange={this.inputChange} placeholder="Confirm Password" />
                 </Form.Group>
-                <div>
+                <div className='register_errors'>
                     {this.state.confirmPasswordError}
                 </div>
                 <Form.Group controlId="Email">
