@@ -1,3 +1,25 @@
+
+/* Landing Page */
+
+App {
+    text-align: center;
+  }
+  
+  .page-container {
+    display:flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: url('./images/background.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgb(85, 6, 6, 0.6);
+  }
+  
+  .content-wrap {
+    flex:1;
+  }
+  
 .color-nav {
     background:rgb(209, 202, 202, 0.9);
     height: 90px;
@@ -18,7 +40,9 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin-left: auto;
     margin-right: auto;
+    overflow: auto;
     margin-top: 50px;
+    
 }
 
 .login_inputs {
@@ -65,3 +89,27 @@
     color: #050405;
     font-size: 15px;
 }
+
+.login_errors {
+    color: #BE0909;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+
+.register_errors {
+    color: #BE0909;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 0px;
+}
+
+.main-footer {
+    color: rgb(14, 1, 1);
+    background-color:rgb(177, 172, 172, 0.9);
+    padding-top: 3em;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+   
+}
+

@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../mystyles.css';
 
@@ -29,7 +30,7 @@ class LoginForm extends React.Component {
         const cred = this.state.credentials;
         cred[event.target.name]=event.target.value;
         this.setState({credentials: cred});
-        console.log(cred)
+        console.log(cred);
         
     }
 
@@ -97,21 +98,27 @@ class LoginForm extends React.Component {
     render () {
         return (
         <div>
+            <Row>
             <Form inline onSubmit={this.handleSubmit}>
                 <Form.Group className="mr-2" controlId="Username">
                     <Form.Control className="login_inputs" type="input" name="username" value={this.state.credentials.username} onChange={this.inputChange} placeholder="Username" />
                 </Form.Group>
-                <div>
-                    {this.state.usernameError}
-                </div>
                 <Form.Group className="mr-2" controlId="Password">
                     <Form.Control className="login_inputs" type="password" name="password" value={this.state.credentials.password} onChange={this.inputChange} placeholder="Password" />
                 </Form.Group>
-                <div>
-                    {this.state.passwordError}
-                </div>
                 <Button className="login_button" type="submit">Sign in</Button>
             </Form>
+            </Row>
+            <Row>
+            <Form inline>
+                <Form.Group className="mr-4 ml-2">
+                    <Form.Label className="login_errors">{this.state.usernameError}</Form.Label> 
+                </Form.Group>
+                <Form.Group className="ml-3">
+                    <Form.Label className="login_errors">{this.state.passwordError}</Form.Label> 
+                </Form.Group>
+            </Form>
+            </Row>
         </div>
         )
     }
