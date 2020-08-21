@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'whoah',
     'corsheaders',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'import_export'
 
 ]
 
