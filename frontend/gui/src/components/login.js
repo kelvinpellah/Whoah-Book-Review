@@ -70,8 +70,12 @@ class LoginForm extends React.Component {
                 url:'http://127.0.0.1:8000/api/login/',
                 data: form,
                 headers: {'Content-Type': 'multipart/form-data'}
+            }).then(response => {
+                this.props.handleLogin(response.data);
             })
-            console.log(res);
+            .catch(error => {
+                console.log('Login Error,', error);
+            })
         } catch (error) {
             console.log(error)
         }

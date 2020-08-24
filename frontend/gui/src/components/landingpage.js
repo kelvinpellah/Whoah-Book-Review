@@ -3,13 +3,23 @@ import LoginForm from './login';
 import RegistrationForm from './registration';
 import AppFooter from './landingfooter';
 import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
+import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from '../images/logo.png';
 
 
 class LandingPage extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.handleLogin = this.handleLogin.bind(this);
+    }
+
+    handleLogin(data) {
+        this.props.history.push('/books');
+    }
+
     render() {
         return(
             <div className="page-container">
@@ -24,18 +34,19 @@ class LandingPage extends React.Component {
                     className="d-inline-block align-top"
                     />
                 </Navbar.Brand>
-                    <Nav className="ml-auto">
-                        <LoginForm />
-                    </Nav>
+                <Form inline className="ml-auto">
+                    <LoginForm handleLogin={this.handleLogin} />
+                </Form>
                 </Navbar>
-                
                 <Card className= 'register_card'>
                     <Card.Body>
-                        <RegistrationForm />
+                        <RegistrationForm handleLogin={this.handleLogin}/>
                     </Card.Body>
                 </Card>
-            </div>
-            <AppFooter />
+                </div>
+                <div>
+                    <AppFooter />
+                </div>
             </div>
         )
     }

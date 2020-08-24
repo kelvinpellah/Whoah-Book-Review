@@ -4,21 +4,29 @@ import {Route, Switch} from "react-router-dom";
 import LandingPage from "./components/landingpage";
 import FeaturedBooks from './components/books';
 
-function App() {
-  return (
-    <Router>
-      <div className='app'>
-        <Switch>
-            <Route exact path="/home">
-                <LandingPage/>
-            </Route>
-            <Route exact path="/books">
-                <FeaturedBooks />
-            </Route>
-        </Switch>
-    </div>
-    </Router>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  render() {
+    return (
+      <Router>
+        <div className='App'>
+          <Switch>
+              <Route 
+              exact 
+              path="/home"
+              render={props => (
+                <LandingPage {...props}/>
+              )}>
+              </Route>
+              <Route exact path="/books">
+                  <FeaturedBooks />
+              </Route>
+          </Switch>
+      </div>
+      </Router>
+    );
+  }
 }
-
 export default App;
