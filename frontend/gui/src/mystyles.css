@@ -113,3 +113,18 @@ App {
    
 }
 
+.book_card {
+    background-color: #FFFFFF;
+    border-color: #777776 ;
+    border-width: 1px;
+    width: 150px;
+    height: 200px;
+    border-radius: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: auto;
+    
+}
+
+.book_nav {
+    margin-bottom: 30px;
+}

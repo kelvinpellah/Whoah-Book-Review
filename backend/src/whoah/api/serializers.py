@@ -1,5 +1,6 @@
 
 from django.contrib.auth.models import User
+from ..models import Book
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from django.conf import settings
@@ -52,4 +53,11 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
+# Load books after login        
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = ['id', 'isbn', 'title','author', 'year']
         
