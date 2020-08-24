@@ -1,4 +1,5 @@
-from .serializers import RegisterUserSerializer
+from .serializers import RegisterUserSerializer, BookSerializer
+from ..models import Book
 from rest_framework import status
 from rest_framework import viewsets
 from django.contrib.auth.models import User
@@ -6,9 +7,10 @@ from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
+import random
 
 # Register viewset
-class RegisterUserViewSet(viewsets.ModelViewSet):
+class RegisterUserViewset(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = RegisterUserSerializer
     
@@ -28,4 +30,24 @@ class LoginViewset(viewsets.ViewSet):
 
     def create(self, request):
         return ObtainAuthToken().post(request)        
+
+
+# Load featured books after login
+class BookViewset(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = BookSerializer(queryset, many=True)
+        random_books = random.choices(serializer.data, k=12) # Pick 10 random books
+        books = []
+        i = 1
+        for book in random_books:
+            while i <= len(random_books):
+                books.append(book)
+                i += 1
+                break
+        return Response(books) # Return 9 books
+
 
