@@ -99,25 +99,25 @@ class LoginForm extends React.Component {
         return (
         <div>
             <Row>
-            <Form inline onSubmit={this.handleSubmit}>
-                <Form.Group className="mr-2" controlId="Username">
-                    <Form.Control className="login_inputs" type="input" name="username" value={this.state.credentials.username} onChange={this.inputChange} placeholder="Username" />
-                </Form.Group>
-                <Form.Group className="mr-2" controlId="Password">
-                    <Form.Control className="login_inputs" type="password" name="password" value={this.state.credentials.password} onChange={this.inputChange} placeholder="Password" />
-                </Form.Group>
-                <Button className="login_button" type="submit">Sign in</Button>
-            </Form>
+                <Form inline onSubmit={this.handleSubmit}>
+                    <Form.Group className="mr-2" controlId="Username">
+                        <Form.Control className="login_inputs" type="input" name="username" value={this.state.credentials.username} onChange={this.inputChange} placeholder="Username" />
+                    </Form.Group>
+                    <Form.Group className="mr-2" controlId="Password">
+                        <Form.Control className="login_inputs" type="password" name="password" value={this.state.credentials.password} onChange={this.inputChange} placeholder="Password" />
+                    </Form.Group>
+                    <Button className="login_button" type="submit">Sign in</Button>
+                </Form>
             </Row>
             <Row>
-            <Form inline>
-                <Form.Group className="mr-4 ml-2">
-                    <Form.Label className="login_errors">{this.state.usernameError}</Form.Label> 
-                </Form.Group>
-                <Form.Group className="ml-3">
-                    <Form.Label className="login_errors">{this.state.passwordError}</Form.Label> 
-                </Form.Group>
-            </Form>
+                <Form inline>
+                    <Form.Group className="mr-4 ml-2">
+                        <Form.Label className="login_errors">{this.state.usernameError}</Form.Label> 
+                    </Form.Group>
+                    <Form.Group className="ml-3">
+                        <Form.Label className="login_errors">{this.state.passwordError}</Form.Label> 
+                    </Form.Group>
+                </Form>
             </Row>
         </div>
         )
