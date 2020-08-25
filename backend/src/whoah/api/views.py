@@ -40,7 +40,7 @@ class BookViewset(viewsets.ModelViewSet):
     def list(self, request):
         queryset = self.get_queryset()
         serializer = BookSerializer(queryset, many=True)
-        random_books = random.choices(serializer.data, k=12) # Pick 10 random books
+        random_books = random.choices(serializer.data, k=12) # Pick 12 random books
         books = []
         i = 1
         for book in random_books:
@@ -48,6 +48,6 @@ class BookViewset(viewsets.ModelViewSet):
                 books.append(book)
                 i += 1
                 break
-        return Response(books) # Return 9 books
+        return Response(books) # Return 12 books
 
 
