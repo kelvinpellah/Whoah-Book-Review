@@ -20,7 +20,7 @@ App {
     flex:1;
   }
   
-.color-nav {
+.landing-nav {
     background:rgb(209, 202, 202, 0.9);
     height: 90px;
 }
@@ -117,11 +117,13 @@ App {
     background-color: #FFFFFF;
     border-color: #777776 ;
     border-width: 1px;
-    width: 150px;
-    height: 200px;
+    width: 200px;
+    height: 250px;
     border-radius: 10px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
     
 }
 
