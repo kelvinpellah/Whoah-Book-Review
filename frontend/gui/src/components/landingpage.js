@@ -24,7 +24,7 @@ class LandingPage extends React.Component {
         return(
             <div className="page-container">
                 <div className="content-wrap">
-                <Navbar className = 'color-nav' >
+                <Navbar className = 'landing-nav' >
                 <Navbar.Brand href="#home">
                     <img
                     alt="Website Logo"
