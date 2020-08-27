@@ -2,13 +2,12 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import Navbar from 'react-bootstrap/Navbar';
 import axios from "axios";
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Logo from '../images/logo.png';
+import BookSearch from './booksearch';
 
 
 // Generate Columns and Cards for book Display
@@ -58,7 +57,6 @@ class FeaturedBooks extends React.Component {
                 url:'http://127.0.0.1:8000/api/books/',
             }).then(response => {
                 this.handleBooks(response.data);
-                //console.log(response.data);
             })
             .catch(error => {
                 console.log('Books Error,', error);
@@ -77,23 +75,20 @@ class FeaturedBooks extends React.Component {
         return (
             <div>
                 <Navbar className='book_nav'>
-                <Link to="/home">
-                        <Navbar.Brand >
-                        <img
-                        alt="Website Logo"
-                        src={Logo}
-                        width="250"
-                        height="118"
-                        className="d-inline-block align-top"
-                        />
-                    </Navbar.Brand>
-                </Link>
-                    <Form inline className="ml-auto">
-                        <Form.Group controlId="bookSearch" >
-                            <Form.Control type='input' placeholder="Search for a book.." />
-                        </Form.Group>
-                        <Button className='ml-2' type='submit'>Search</Button>
-                    </Form>
+                    <Link to="/home">
+                            <Navbar.Brand >
+                            <img
+                            alt="Website Logo"
+                            src={Logo}
+                            width="250"
+                            height="118"
+                            className="d-inline-block align-top"
+                            />
+                        </Navbar.Brand>
+                    </Link>
+                    <div className="book_search">
+                        <BookSearch />
+                    </div>
                 </Navbar>
                 <Container>
                     <h3>Recommended books for you:</h3>

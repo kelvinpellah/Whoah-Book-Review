@@ -129,4 +129,20 @@ App {
 
 .book_nav {
     margin-bottom: 30px;
+    height:90px;
+    overflow:visible;
+    background-color: teal;
+}
+
+.book_search {
+    position: relative;
+    margin-left: auto;
+    margin-top: 150px;
+    margin-right: 6px;
+
+}
+
+.book-search-card {
+    position: absolute;
+    width: 18rem;
 }
