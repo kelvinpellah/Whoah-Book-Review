@@ -57,7 +57,6 @@ class FeaturedBooks extends React.Component {
                 url:'http://127.0.0.1:8000/api/books/',
             }).then(response => {
                 this.handleBooks(response.data);
-                //console.log(response.data);
             })
             .catch(error => {
                 console.log('Books Error,', error);
@@ -87,7 +86,7 @@ class FeaturedBooks extends React.Component {
                             />
                         </Navbar.Brand>
                     </Link>
-                    <div className="ml-auto">
+                    <div className="book_search">
                         <BookSearch />
                     </div>
                 </Navbar>

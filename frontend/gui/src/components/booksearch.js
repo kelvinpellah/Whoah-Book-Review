@@ -1,10 +1,18 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
+import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
 
 
+// Generate Card inputs for search results.
+function BookSearchList(props) {
+    return(
+        <ListGroup.Item>{props.value}</ListGroup.Item>    
+    )
+}
 
 class BookSearch extends React.Component {
 
@@ -12,7 +20,7 @@ class BookSearch extends React.Component {
         super(props);
         this.state = {
             query:"",
-            results: {},
+            results: '',
             message:'',
             loading: false
         }
@@ -31,6 +39,19 @@ class BookSearch extends React.Component {
 
     }
 
+    // handle Search Results
+
+    handleSearchResults = results => {
+        const resultNotFound = !results.length? 'No results.' : '';
+        this.setState({
+            results: results.map(result => (
+                <BookSearchList key={result.id} value={`${result.title} by ${result.author}, ${result.year}`}/>
+            )),
+            message:resultNotFound,
+            loading:false
+        })
+    }
+
     fetchSearchResults = async (query) => {
         // Remove cancel token when we start
         if(this.cancel){
@@ -42,12 +63,17 @@ class BookSearch extends React.Component {
                     `http://127.0.0.1:8000/api/book/?search=${query}`,
                     { cancelToken: this.cancel.token}
                 ).then(response => {
-                        console.log(response);
-                    }).catch(error => {
-                        console.log('The error is', error)
+                    this.handleSearchResults(response.data);
+                }).catch(error => {
+                        if (axios.isCancel(error) || error) {
+                            this.setState({
+                                loading:false,
+                                message:'Failed to fetch books. Please check Network.'
+                            })
+                        }
                     })
             } catch (error) {
-                console.log(error.message)
+               // console.log(error.message)
             }
 
         }   
@@ -61,6 +87,7 @@ class BookSearch extends React.Component {
     render() {
         return(
             <div>
+                <Row>
                 <Form inline onSubmit={this.handleSubmit} >
                     <Form.Group  >
                         <Form.Control 
@@ -71,6 +98,14 @@ class BookSearch extends React.Component {
                     </Form.Group>
                     <Button className="ml-2" type='submit'>Submit</Button>
                 </Form>
+                </Row>
+                <Row>
+                <Card className='book-search-card'>
+                    <ListGroup >
+                        {this.state.results}
+                    </ListGroup>
+                </Card>
+                </Row>
             </div>
         )
     }
