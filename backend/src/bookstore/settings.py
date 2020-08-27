@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     'whoah',
     'corsheaders',
     'rest_framework.authtoken',
-    'import_export'
+    'import_export',
+    'django_filters',
 
 ]
 
@@ -49,7 +50,7 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
 }
 
 ROOT_URLCONF = 'bookstore.urls'
