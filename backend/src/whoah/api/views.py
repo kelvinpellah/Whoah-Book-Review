@@ -1,4 +1,5 @@
 from .serializers import RegisterUserSerializer, BookSerializer
+from rest_framework import filters
 from ..models import Book
 from rest_framework import status
 from rest_framework import viewsets
@@ -49,5 +50,12 @@ class BookViewset(viewsets.ModelViewSet):
                 i += 1
                 break
         return Response(books) # Return 12 books
+
+# Search for a book
+class BookSearchViewset(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'isbn', 'author', 'year']
 
 
