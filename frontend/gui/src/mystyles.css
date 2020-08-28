@@ -134,6 +134,7 @@ App {
 .book-search-card {
     position: absolute;
     width: 18rem;
+    z-index: 9;
 }
 
 .spinner-hide {

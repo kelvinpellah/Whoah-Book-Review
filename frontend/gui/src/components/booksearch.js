@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import {Link} from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
 import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
@@ -11,7 +12,9 @@ import axios from 'axios';
 // Generate Card inputs for search results.
 function BookSearchList(props) {
     return(
-        <ListGroup.Item>{props.value}</ListGroup.Item>    
+        <Link>
+            <ListGroup.Item>{props.value}</ListGroup.Item>    
+        </Link>
     )
 }
 
@@ -43,14 +46,18 @@ class BookSearch extends React.Component {
     // handle Search Results
 
     handleSearchResults = results => {
-        const resultNotFound = !results.length? 'No results.' : '';
-        this.setState({
-            results: results.map(result => (
-                <BookSearchList key={result.id} value={`${result.title} by ${result.author}, ${result.year}`}/>
-            )),
-            message:resultNotFound,
-            loading:false
-        })
+        results.length ? 
+            this.setState({
+                results: results.map(result => (
+                    <BookSearchList key={result.id} value={`${result.title} by ${result.author}, ${result.year}`}/>
+                )),
+                message:'',
+                loading:false
+            }) : this.setState({
+                results:'',
+                message:'No results.',
+                loading:false,
+            });
     }
 
     fetchSearchResults = async (query) => {
