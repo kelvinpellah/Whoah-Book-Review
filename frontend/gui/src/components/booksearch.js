@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
 
@@ -32,7 +33,7 @@ class BookSearch extends React.Component {
 
     handleChange= (event) => {
         const query = event.target.value;
-        this.setState({query, message:'', loading:true}, () => {
+        this.setState({query,results:'', message:'', loading:true}, () => {
             this.fetchSearchResults(query);
         }
         );
@@ -59,7 +60,7 @@ class BookSearch extends React.Component {
         }
         this.cancel = axios.CancelToken.source();
         try {   
-                if(query.length > 1) {
+                if(query.length) {
                         let res= await axios.get(
                         `http://127.0.0.1:8000/api/book/?search=${query}`,
                         { cancelToken: this.cancel.token}
@@ -82,7 +83,7 @@ class BookSearch extends React.Component {
                 }
                 
             } catch (error) {
-               // console.log(error.message)
+                console.log("the error is",error)
             }
 
         }   
@@ -94,6 +95,7 @@ class BookSearch extends React.Component {
         }
 
     render() {
+        const {results,message,loading,query} = this.state;
         return(
             <div>
                 <Row>
@@ -101,7 +103,7 @@ class BookSearch extends React.Component {
                     <Form.Group  >
                         <Form.Control 
                             type='input' 
-                            value={this.state.query} 
+                            value={query} 
                             onChange={this.handleChange} 
                             placeholder="Search by title, author etc" />   
                     </Form.Group>
@@ -109,12 +111,13 @@ class BookSearch extends React.Component {
                 </Form>
                 </Row>
                 <Row>
-                <Card className='book-search-card'>
+                <Card className={results? "book-search-card" : 'book-search-hide'}>
                     <ListGroup >
-                        {this.state.results}
+                        {results}
                     </ListGroup>
                 </Card>
-                <p>{this.state.message}</p>
+                <p className="book-message">{message}</p>
+                <Spinner animation="border" variant="info" className={loading? 'spinner-show':'spinner-hide'}/>
                 </Row>
             </div>
         )
