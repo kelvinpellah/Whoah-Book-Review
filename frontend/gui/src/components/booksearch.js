@@ -58,20 +58,29 @@ class BookSearch extends React.Component {
             this.cancel.cancel();
         }
         this.cancel = axios.CancelToken.source();
-        try {
-                let res= await axios.get(
-                    `http://127.0.0.1:8000/api/book/?search=${query}`,
-                    { cancelToken: this.cancel.token}
-                ).then(response => {
-                    this.handleSearchResults(response.data);
-                }).catch(error => {
-                        if (axios.isCancel(error) || error) {
-                            this.setState({
-                                loading:false,
-                                message:'Failed to fetch books. Please check Network.'
-                            })
-                        }
+        try {   
+                if(query.length > 1) {
+                        let res= await axios.get(
+                        `http://127.0.0.1:8000/api/book/?search=${query}`,
+                        { cancelToken: this.cancel.token}
+                    ).then(response => {
+                        this.handleSearchResults(response.data);
+                    }).catch(error => {
+                            if (!axios.isCancel(error)) {
+                                this.setState({
+                                    loading:false,
+                                    message:'Failed to fetch books. Please check Network.'
+                                })
+                            }
+                        })
+                } else {
+                    this.setState({
+                        results: '',
+                        message:'',
+                        loading: false
                     })
+                }
+                
             } catch (error) {
                // console.log(error.message)
             }
@@ -105,6 +114,7 @@ class BookSearch extends React.Component {
                         {this.state.results}
                     </ListGroup>
                 </Card>
+                <p>{this.state.message}</p>
                 </Row>
             </div>
         )
