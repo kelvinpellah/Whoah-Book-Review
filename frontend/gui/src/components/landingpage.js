@@ -1,7 +1,6 @@
 import React from 'react';
 import LoginForm from './login';
 import RegistrationForm from './registration';
-import AppFooter from './landingfooter';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
@@ -43,9 +42,6 @@ class LandingPage extends React.Component {
                         <RegistrationForm handleLogin={this.handleLogin}/>
                     </Card.Body>
                 </Card>
-                </div>
-                <div>
-                    <AppFooter />
                 </div>
             </div>
         )

@@ -102,17 +102,6 @@ App {
     margin-top: 0px;
 }
 
-.main-footer {
-    color: rgb(14, 1, 1);
-    background-color:rgb(177, 172, 172, 0.9);
-    padding-top: 3em;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-   
-}
-
 .book_card {
     background-color: #FFFFFF;
     border-color: #777776 ;
@@ -145,4 +134,26 @@ App {
 .book-search-card {
     position: absolute;
     width: 18rem;
+    z-index: 9;
+}
+
+.spinner-hide {
+    display: none;
+
+}
+.spinner-show {
+    position: absolute;
+    left:0;
+    right:0;
+    margin:auto;
+    margin-top: 4px;
+
+}
+
+.book-search-hide {
+    display: none;
+}
+
+.book-message {
+    border: none;
 }

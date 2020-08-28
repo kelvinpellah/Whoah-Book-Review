@@ -3,6 +3,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import {Link} from "react-router-dom";
+import Spinner from 'react-bootstrap/Spinner';
 import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
 
@@ -10,7 +12,9 @@ import axios from 'axios';
 // Generate Card inputs for search results.
 function BookSearchList(props) {
     return(
-        <ListGroup.Item>{props.value}</ListGroup.Item>    
+        <Link>
+            <ListGroup.Item>{props.value}</ListGroup.Item>    
+        </Link>
     )
 }
 
@@ -32,7 +36,7 @@ class BookSearch extends React.Component {
 
     handleChange= (event) => {
         const query = event.target.value;
-        this.setState({query, message:'', loading:true}, () => {
+        this.setState({query,results:'', message:'', loading:true}, () => {
             this.fetchSearchResults(query);
         }
         );
@@ -42,14 +46,18 @@ class BookSearch extends React.Component {
     // handle Search Results
 
     handleSearchResults = results => {
-        const resultNotFound = !results.length? 'No results.' : '';
-        this.setState({
-            results: results.map(result => (
-                <BookSearchList key={result.id} value={`${result.title} by ${result.author}, ${result.year}`}/>
-            )),
-            message:resultNotFound,
-            loading:false
-        })
+        results.length ? 
+            this.setState({
+                results: results.map(result => (
+                    <BookSearchList key={result.id} value={`${result.title} by ${result.author}, ${result.year}`}/>
+                )),
+                message:'',
+                loading:false
+            }) : this.setState({
+                results:'',
+                message:'No results.',
+                loading:false,
+            });
     }
 
     fetchSearchResults = async (query) => {
@@ -58,22 +66,31 @@ class BookSearch extends React.Component {
             this.cancel.cancel();
         }
         this.cancel = axios.CancelToken.source();
-        try {
-                let res= await axios.get(
-                    `http://127.0.0.1:8000/api/book/?search=${query}`,
-                    { cancelToken: this.cancel.token}
-                ).then(response => {
-                    this.handleSearchResults(response.data);
-                }).catch(error => {
-                        if (axios.isCancel(error) || error) {
-                            this.setState({
-                                loading:false,
-                                message:'Failed to fetch books. Please check Network.'
-                            })
-                        }
+        try {   
+                if(query.length) {
+                        let res= await axios.get(
+                        `http://127.0.0.1:8000/api/book/?search=${query}`,
+                        { cancelToken: this.cancel.token}
+                    ).then(response => {
+                        this.handleSearchResults(response.data);
+                    }).catch(error => {
+                            if (!axios.isCancel(error)) {
+                                this.setState({
+                                    loading:false,
+                                    message:'Failed to fetch books. Please check Network.'
+                                })
+                            }
+                        })
+                } else {
+                    this.setState({
+                        results: '',
+                        message:'',
+                        loading: false
                     })
+                }
+                
             } catch (error) {
-               // console.log(error.message)
+                console.log("the error is",error)
             }
 
         }   
@@ -85,6 +102,7 @@ class BookSearch extends React.Component {
         }
 
     render() {
+        const {results,message,loading,query} = this.state;
         return(
             <div>
                 <Row>
@@ -92,7 +110,7 @@ class BookSearch extends React.Component {
                     <Form.Group  >
                         <Form.Control 
                             type='input' 
-                            value={this.state.query} 
+                            value={query} 
                             onChange={this.handleChange} 
                             placeholder="Search by title, author etc" />   
                     </Form.Group>
@@ -100,11 +118,13 @@ class BookSearch extends React.Component {
                 </Form>
                 </Row>
                 <Row>
-                <Card className='book-search-card'>
+                <Card className={results? "book-search-card" : 'book-search-hide'}>
                     <ListGroup >
-                        {this.state.results}
+                        {results}
                     </ListGroup>
                 </Card>
+                <p className="book-message">{message}</p>
+                <Spinner animation="border" variant="info" className={loading? 'spinner-show':'spinner-hide'}/>
                 </Row>
             </div>
         )
