@@ -18,6 +18,8 @@ function BookCol(props) {
         <Col>
             <Link to={{
                 pathname:`/bookdetails/${props.title}`,
+                bookTitle: props.title,
+                author:props.author,
             }}>
                 <Card className='book_card'>
                     <Card.Img variant="top" src="" />
