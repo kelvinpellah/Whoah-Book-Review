@@ -9,6 +9,7 @@ from rest_framework import generics
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 import random
+from django.shortcuts import get_object_or_404
 
 # Register viewset
 class RegisterUserViewset(viewsets.ModelViewSet):
@@ -59,3 +60,13 @@ class BookSearchViewset(viewsets.ModelViewSet):
     search_fields = ['title', 'isbn', 'author', 'year']
 
 
+# Return a book details
+class BookDetailsViewset(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+    def retrieve(self,request,pk=None):
+        queryset = self.get_queryset()
+        book = get_object_or_404(queryset, pk=pk)
+        serializer = BookSerializer(book)
+        return Response(serializer.dat)

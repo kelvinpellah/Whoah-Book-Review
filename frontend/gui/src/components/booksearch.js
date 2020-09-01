@@ -12,8 +12,16 @@ import axios from 'axios';
 // Generate Card inputs for search results.
 function BookSearchList(props) {
     return(
-        <Link>
-            <ListGroup.Item>{props.value}</ListGroup.Item>    
+        <Link to={{
+            pathname:`/bookdetails/${props.title}`,
+            bookTitle: props.title,
+            author:props.author,
+            yearPublished:props.year,
+        }}>
+            <ListGroup.Item>
+                {props.title} ({props.year})
+                <footer className="blockquote-footer" >by <cite title="Source Title">{props.author}</cite></footer>
+            </ListGroup.Item>    
         </Link>
     )
 }
@@ -49,7 +57,7 @@ class BookSearch extends React.Component {
         results.length ? 
             this.setState({
                 results: results.map(result => (
-                    <BookSearchList key={result.id} value={`${result.title} by ${result.author}, ${result.year}`}/>
+                    <BookSearchList key={result.id} title={result.title} author={result.author} year = {result.year}/>
                 )),
                 message:'',
                 loading:false
