@@ -55,7 +55,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
-# Load books after login        
+# Load books after login       
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book

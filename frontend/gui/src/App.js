@@ -3,6 +3,7 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import {Route, Switch} from "react-router-dom";
 import LandingPage from "./components/landingpage";
 import FeaturedBooks from './components/books';
+import BookDetails from './components/bookdetails';
 
 class App extends React.Component {
   constructor(props) {
@@ -22,6 +23,9 @@ class App extends React.Component {
               </Route>
               <Route exact path="/books">
                   <FeaturedBooks />
+              </Route>
+              <Route exact path="/bookdetails/:name">
+                  <BookDetails />
               </Route>
           </Switch>
       </div>
