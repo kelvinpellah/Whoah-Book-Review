@@ -20,6 +20,7 @@ function BookCol(props) {
                 pathname:`/bookdetails/${props.title}`,
                 bookTitle: props.title,
                 author:props.author,
+                yearPublished:props.year,
             }}>
                 <Card className='book_card'>
                     <Card.Img variant="top" src="" />
@@ -51,7 +52,7 @@ class FeaturedBooks extends React.Component {
     handleBooks(books) {
         this.setState({
             books: books.map((book) =>
-            <BookCol key={book.id} title={book.title} author={book.author}/>
+            <BookCol key={book.id} title={book.title} author={book.author} isbn={book.isbn} year={book.year}/>
         ),
             loading:false,
             message:''
