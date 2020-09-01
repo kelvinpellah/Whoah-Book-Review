@@ -11,7 +11,7 @@ import Logo from '../images/logo.png';
 
 function BookDetails(props){
 
-        // THE COMMENTED CODE WOULD BE USED TO QUERY BOOKS FROM GOODREADS.
+        // THE COMMENTED CODE WOULD BE USED TO QUERY A BOOK FROM GOODREADS.
         // DUE TO CORS ISSUES, I FAILED TO RESOLVE.
         // INSTEAD, WILL USE INFO STORED IN MY DATABASE FOR BOOK DETAILS COMPONENT.
 
@@ -26,7 +26,7 @@ function BookDetails(props){
         //    try {
         //        let res = await axios.get('https://www.goodreads.com/book/title.json', {
         //            params: {
-        //                key: "Nk9m6Sl1CdxEDJ5Cjwpmpw",
+        //                key: KEY,
         //                title: bookTitle,
         //                author: author
         //            }
