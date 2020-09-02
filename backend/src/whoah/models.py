@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 class Book(models.Model):
     isbn = models.CharField(max_length=20, null=True)
@@ -9,3 +11,10 @@ class Book(models.Model):
     def __str__(self):
         return f"{self.title} by {self.author}"
 
+class BookComment(models.Model):
+    comment = models.TextField(max_length=300, null=False, blank=False)
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE) 
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)  
+    
+    def __str__(self):
+        return f"New comment from {self.commenter}"
