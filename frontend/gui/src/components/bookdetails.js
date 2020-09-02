@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 //import { useState, useEffect } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 // import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
 import { useLocation } from 'react-router';
@@ -96,11 +98,20 @@ function BookDetails(props){
                             <Card.Img variant="top" src="" />
                         </Card>
                         {/* <Spinner animation="border" variant="info" className={loading? 'spinner-show':'spinner-hide'}/> */}
-                        <h3>Book Title: {bookTitle}</h3>
-                        <h3>Author: {author}</h3>
-                        <h3>Publication Year: {yearPublished}</h3>
+                        <h4>Book Title: {bookTitle}</h4>
+                        <h4>Author: {author}</h4>
+                        <h4>Publication Year: {yearPublished}</h4>
                         <hr/>
-                    </Container>
+                        <div>
+                        <h4>Would you like to comment on this book?</h4>
+                            <Form>
+                                <Form.Group ControlID="commentID">
+                                    <Form.Control placeholder="Leave your comments here" type="textarea"/>
+                                </Form.Group>
+                                <Button variant="primary" type="submit">Submit</Button>
+                            </Form>
+                        </div>    
+                        </Container>
                 </div>
             )  
       
