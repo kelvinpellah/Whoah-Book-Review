@@ -77,3 +77,9 @@ class CommentViewset(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['book__title']
+
+    def create(self,request,*args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)

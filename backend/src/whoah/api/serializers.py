@@ -70,5 +70,14 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookComment
         fields = ['id',"comment","commenter","book"]
+
+    # Add new comments
+    def create(self,validated_data):
+        comment = BookComment.objects.create(
+            comment = validated_data['comment'],
+            commenter = validated_data['commenter'],
+            book= validated_data['book']
+        )  
+        return comment 
             
         

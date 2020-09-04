@@ -12,7 +12,7 @@ class Book(models.Model):
         return f"{self.title} by {self.author}"
 
 class BookComment(models.Model):
-    commenter = models.OneToOneField(User, on_delete=models.CASCADE, null=False) 
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE, null=False) 
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     comment = models.TextField(max_length=300, null=False, blank=False)
 
