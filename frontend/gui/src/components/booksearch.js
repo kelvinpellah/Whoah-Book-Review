@@ -122,7 +122,7 @@ class BookSearch extends React.Component {
                             onChange={this.handleChange} 
                             placeholder="Search by title, author etc" />   
                     </Form.Group>
-                    <Button className="ml-2" type='submit'>Submit</Button>
+                    <Button className="ml-2" type='submit'>Search</Button>
                 </Form>
                 </Row>
                 <Row>
