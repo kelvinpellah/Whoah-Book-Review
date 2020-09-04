@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-//import { useState, useEffect } from 'react';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -9,7 +9,20 @@ import Card from 'react-bootstrap/Card';
 import { useLocation } from 'react-router';
 import {Link} from "react-router-dom";
 import Logo from '../images/logo.png';
-// import axios from 'axios';
+import axios from 'axios';
+
+// Generate Card inputs for comment results.
+function CommentList(props) {
+    return(
+            <Card>
+                <Card.Body>
+                    <Card.Title>{props.commenter}</Card.Title>
+                    <Card.Text>{props.comment}</Card.Text>
+                </Card.Body>
+            </Card>    
+        
+    )
+}
 
 function BookDetails(props){
 
@@ -78,6 +91,103 @@ function BookDetails(props){
 
             const location = useLocation();
             const {bookTitle, author, yearPublished} = location;
+            const [results,setResults] = useState('');
+
+            // handle comment Results
+
+            function handleCommentResults(results){
+                results.length ? 
+                    setResults(
+                        results.map(result => (
+                            <CommentList key={result.id} commenter={result.commenter} comment={result.comment} />
+                        ))
+                 ) : setResults(
+                        ""
+                    );
+            }
+
+            // FETCH COMMENTS AND DISPLAY
+            async function fetchComments(title){
+                try {   
+                    if(title.length) {
+                            let res= await axios.get(
+                            `http://127.0.0.1:8000/api/comment/?search=${title}`
+                        ).then(response => {
+                            handleCommentResults(response.data);
+                        }).catch(error => {
+                                console.log('error is', error)
+                            })
+                    }
+                    
+                } catch (error) {
+                    console.log("the error is",error)
+                }
+            }
+
+            useEffect(() => {
+                fetchComments(bookTitle);
+            })
+
+            // FOLLOWING LINES WILL BE USED TO SEND COMMENTS TO DB
+            //const [comment,setComment] = useState('');
+            //const [commentError,setCommentError] = useState('');
+            //const [commentError,setCommentError1] = useState('');
+            //
+            //inputChange = (event) => {
+            //    setComment(() => {
+            //        event.target.value;
+            //    })
+            //}
+//
+            //sendData = async () => {
+//
+            //    const form = new FormData();
+            //    form.append('comment', comment);
+            //    form.append('commenter',);
+            //    form.append('book', bookTitle);
+            //    try {
+            //        let res = await axios.post('http://127.0.0.1:8000/api/comment/',
+            //    {
+            //        data: form
+            //    }).then(response => {
+            //        handleResponse(response.data);
+            //    }).catch(error => {
+            //        console.log('error is',error);
+            //    })
+            //    } catch (error) {
+            //        console.log('error is',error);
+            //    }
+            //    
+            //}
+//
+            //validateForm = () => {
+            //    let commentError = '';
+            //    let commentError1 = '';
+//
+            //    commentError = `${!comment ? 'Please write a comment.' : ''}`;
+            //    commentError1 = `${comment.length < 4 ? "Comment is too short." : ""}`;
+//
+            //    if(commentError || commentError1) {
+            //        setCommentError(commentError);
+            //        setCommentError1(commentError1);
+            //        return false;
+            //    }
+//
+            //    return true;
+//
+            //}
+//
+            //handleSubmit = (event) => {
+            //    event.preventDefault();
+            //    const isValid = validateForm();
+            //    if (isValid) {
+            //        sendData();
+            //        setComment('');
+            //    }
+            //}
+
+            
+            
             return(
                 <div>
                     <Navbar className='book_nav'>
@@ -103,8 +213,12 @@ function BookDetails(props){
                         <h4>Publication Year: {yearPublished}</h4>
                         <hr/>
                         <div>
+                            <h4>Comments from readers:</h4>
+                            {results}
+                        </div>
+                        <div>
                         <h4>Would you like to comment on this book?</h4>
-                            <Form>
+                            <Form >
                                 <Form.Group ControlID="commentID">
                                     <Form.Control placeholder="Leave your comments here" type="textarea"/>
                                 </Form.Group>
