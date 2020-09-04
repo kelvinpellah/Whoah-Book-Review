@@ -1,6 +1,6 @@
-from .serializers import RegisterUserSerializer, BookSerializer
+from .serializers import RegisterUserSerializer, BookSerializer, CommentSerializer
 from rest_framework import filters
-from ..models import Book
+from ..models import Book, BookComment
 from rest_framework import status
 from rest_framework import viewsets
 from django.contrib.auth.models import User
@@ -69,4 +69,17 @@ class BookDetailsViewset(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         book = get_object_or_404(queryset, pk=pk)
         serializer = BookSerializer(book)
-        return Response(serializer.dat)
+        return Response(serializer.data)
+
+# Handling book comments
+class CommentViewset(viewsets.ModelViewSet):
+    queryset = BookComment.objects.all()  
+    serializer_class = CommentSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['book__title']
+
+    def create(self,request,*args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)

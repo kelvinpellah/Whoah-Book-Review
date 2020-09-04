@@ -1,6 +1,6 @@
 
 from django.contrib.auth.models import User
-from ..models import Book
+from ..models import Book, BookComment
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from django.conf import settings
@@ -60,4 +60,24 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ['id', 'isbn', 'title','author', 'year']
+
+
+# Book comment serializer
+class CommentSerializer(serializers.ModelSerializer):
+    commenter = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    book = serializers.SlugRelatedField(slug_field ="title", queryset=Book.objects.all())
+
+    class Meta:
+        model = BookComment
+        fields = ['id',"comment","commenter","book"]
+
+    # Add new comments
+    def create(self,validated_data):
+        comment = BookComment.objects.create(
+            comment = validated_data['comment'],
+            commenter = validated_data['commenter'],
+            book= validated_data['book']
+        )  
+        return comment 
+            
         
