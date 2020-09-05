@@ -10,11 +10,12 @@ import { useLocation } from 'react-router';
 import {Link} from "react-router-dom";
 import Logo from '../images/logo.png';
 import axios from 'axios';
+import Book from '../images/book.jpg';
 
 // Generate Card inputs for comment results.
 function CommentList(props) {
     return(
-            <Card>
+            <Card className="comment_card">
                 <Card.Body>
                     <Card.Title>{props.commenter}</Card.Title>
                     <Card.Text>{props.comment}</Card.Text>
@@ -205,14 +206,14 @@ function BookDetails(props){
                     </Navbar>
                     <Container>
                         <Card className='book_card'>
-                            <Card.Img variant="top" src="" />
+                            <Card.Img variant="top" src={Book} />
                         </Card>
                         {/* <Spinner animation="border" variant="info" className={loading? 'spinner-show':'spinner-hide'}/> */}
-                        <h4>Book Title: {bookTitle}</h4>
-                        <h4>Author: {author}</h4>
-                        <h4>Publication Year: {yearPublished}</h4>
+                        <h4>Book Title: <span className="details">{bookTitle}</span></h4>
+                        <h4>Author: <span className="details">{author}</span></h4>
+                        <h4>Publication Year: <span className="details">{yearPublished}</span></h4>
                         <hr/>
-                        <div>
+                        <div className="comment_display">
                             <h4>Comments from readers:</h4>
                             {results}
                         </div>

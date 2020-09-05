@@ -9,6 +9,7 @@ import Container from 'react-bootstrap/Container';
 import Spinner from 'react-bootstrap/Spinner';
 import Logo from '../images/logo.png';
 import BookSearch from './booksearch';
+import Book from '../images/book.jpg';
 
 
 // Generate Columns and Cards for book Display
@@ -23,7 +24,7 @@ function BookCol(props) {
                 yearPublished:props.year,
             }}>
                 <Card className='book_card'>
-                    <Card.Img variant="top" src="" />
+                    <Card.Img variant="top" src={Book} />
                     <Card.Body>
                         <Card.Title>{props.title}</Card.Title>
                         <footer className="blockquote-footer" >by <cite title="Source Title">{props.author}</cite></footer>
