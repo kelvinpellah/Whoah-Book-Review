@@ -151,6 +151,12 @@ App {
 
 }
 
+.spinner-comment {
+    margin:auto;
+    margin-top: 4px;
+
+}
+
 .book-search-hide {
     display: none;
 }
@@ -167,3 +173,8 @@ App {
     font-style: italic;
     color:rgb(214, 82, 82); 
 }
+
+.comment_display {
+    margin-bottom: 4px;
+}
+
