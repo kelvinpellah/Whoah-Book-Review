@@ -104,12 +104,13 @@ App {
 
 .book_card {
     background-color: #FFFFFF;
+    color:rgb(214, 82, 82); 
     border-color: #777776 ;
     border-width: 1px;
     width: 200px;
     height: 250px;
     border-radius: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma,Verdana, sans-serif;
     margin: auto;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -120,7 +121,7 @@ App {
     margin-bottom: 30px;
     height:90px;
     overflow:visible;
-    background-color: teal;
+    background:rgb(209, 202, 202, 0.9);
 }
 
 .book_search {
@@ -150,6 +151,12 @@ App {
 
 }
 
+.spinner-comment {
+    margin:auto;
+    margin-top: 4px;
+
+}
+
 .book-search-hide {
     display: none;
 }
@@ -157,3 +164,17 @@ App {
 .book-message {
     border: none;
 }
+
+.comment_card {
+    margin-bottom: 2px;
+}
+
+.details {
+    font-style: italic;
+    color:rgb(214, 82, 82); 
+}
+
+.comment_display {
+    margin-bottom: 4px;
+}
+

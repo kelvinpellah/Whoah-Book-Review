@@ -4,17 +4,18 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-// import Spinner from 'react-bootstrap/Spinner';
+import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
 import { useLocation } from 'react-router';
 import {Link} from "react-router-dom";
 import Logo from '../images/logo.png';
 import axios from 'axios';
+import Book from '../images/book.jpg';
 
 // Generate Card inputs for comment results.
 function CommentList(props) {
     return(
-            <Card>
+            <Card className="comment_card">
                 <Card.Body>
                     <Card.Title>{props.commenter}</Card.Title>
                     <Card.Text>{props.comment}</Card.Text>
@@ -92,18 +93,26 @@ function BookDetails(props){
             const location = useLocation();
             const {bookTitle, author, yearPublished} = location;
             const [results,setResults] = useState('');
+            const [loading,setLoading] = useState(true);
+            const [message,setMessage] = useState('');
 
             // handle comment Results
 
             function handleCommentResults(results){
-                results.length ? 
+                if (results.length) {
                     setResults(
                         results.map(result => (
                             <CommentList key={result.id} commenter={result.commenter} comment={result.comment} />
                         ))
-                 ) : setResults(
-                        ""
-                    );
+                 );
+                 setLoading(false);
+                 setMessage(false);
+                } else {
+                    setResults('');
+                    setMessage('No comments yet.');
+                    setLoading(false);
+                }
+                     
             }
 
             // FETCH COMMENTS AND DISPLAY
@@ -115,18 +124,25 @@ function BookDetails(props){
                         ).then(response => {
                             handleCommentResults(response.data);
                         }).catch(error => {
-                                console.log('error is', error)
+                                setResults('');
+                                setMessage('Something went wrong.Check network.');
+                                setLoading(false);
                             })
                     }
                     
                 } catch (error) {
-                    console.log("the error is",error)
+                                setResults('');
+                                setMessage('Something went wrong.Check network.');
+                                setLoading(false);
                 }
             }
 
             useEffect(() => {
                 fetchComments(bookTitle);
-            })
+                setLoading(true);
+                setMessage('');
+                setResults('');
+            }, [bookTitle])
 
             // FOLLOWING LINES WILL BE USED TO SEND COMMENTS TO DB
             //const [comment,setComment] = useState('');
@@ -205,20 +221,22 @@ function BookDetails(props){
                     </Navbar>
                     <Container>
                         <Card className='book_card'>
-                            <Card.Img variant="top" src="" />
+                            <Card.Img variant="top" src={Book} />
                         </Card>
-                        {/* <Spinner animation="border" variant="info" className={loading? 'spinner-show':'spinner-hide'}/> */}
-                        <h4>Book Title: {bookTitle}</h4>
-                        <h4>Author: {author}</h4>
-                        <h4>Publication Year: {yearPublished}</h4>
+                        
+                        <h4>Book Title: <span className="details">{bookTitle}</span></h4>
+                        <h4>Author: <span className="details">{author}</span></h4>
+                        <h4>Publication Year: <span className="details">{yearPublished}</span></h4>
                         <hr/>
-                        <div>
+                        <div className="comment_display">
                             <h4>Comments from readers:</h4>
+                            <Spinner animation="border" variant="info" className={loading? 'spinner-comment':'spinner-hide'}/>
+                            {message}
                             {results}
                         </div>
                         <div>
-                        <h4>Would you like to comment on this book?</h4>
                             <Form >
+                                <h4>Would you like to comment on this book?</h4>
                                 <Form.Group ControlID="commentID">
                                     <Form.Control placeholder="Leave your comments here" type="textarea"/>
                                 </Form.Group>
