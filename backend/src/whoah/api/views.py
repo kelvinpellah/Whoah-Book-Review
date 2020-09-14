@@ -10,6 +10,16 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 import random
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import authenticate
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.status import (
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+    HTTP_200_OK
+)
 
 # Register viewset
 class RegisterUserViewset(viewsets.ModelViewSet):
@@ -24,14 +34,7 @@ class RegisterUserViewset(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save()
-
-# Login viewset
-class LoginViewset(viewsets.ViewSet):
-    serializer_class = AuthTokenSerializer
-
-    def create(self, request):
-        return ObtainAuthToken().post(request)        
+        serializer.save()     
 
 
 # Load featured books after login
