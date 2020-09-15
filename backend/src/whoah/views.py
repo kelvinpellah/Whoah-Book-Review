@@ -1,4 +1,14 @@
+from django.contrib.auth import authenticate, login
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.status import (
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+    HTTP_200_OK
+)
+from rest_framework.response import Response
 
+####################################################################################
 # Not part of the project. Was only used to upload books to the database from the excel file
 
 from django.shortcuts import render
@@ -31,3 +41,21 @@ def index(request):
     }
     # The following line is commented because we dont want to return anything. Not part of project.
     # return render(request,'bookform.html', context) 
+
+#####################################################################################
+
+#Login API
+class CustomAuthToken(ObtainAuthToken):
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer_valid = serializer.is_valid()
+        if serializer_valid:
+            user = serializer.validated_data['user']
+            token, created = Token.objects.get_or_create(user=user)
+            user_authenticate = authenticate(username = request.data.get("username"), password = request.data.get("password"))
+            login(request,user_authenticate)
+            return Response({'token': token.key,'username': user.username,'email': user.email})  
+
+        return Response({'error': 'Wrong username or password.'}, status=HTTP_404_NOT_FOUND)    
