@@ -16,6 +16,7 @@ class LandingPage extends React.Component {
     }
 
     handleLogin(data) {
+        this.props.appHandleLogin(data);
         this.props.history.push('/books');
     }
 

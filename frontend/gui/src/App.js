@@ -7,8 +7,19 @@ import BookDetails from './components/bookdetails';
 
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.state = {
+      token:''
+    }
+    this.appHandleLogin = this.appHandleLogin.bind(this);
   }
+
+  appHandleLogin = (data) => {
+    const token = data.token;
+    this.setState({token});
+  }
+  
+
   render() {
     return (
       <Router>
@@ -18,11 +29,11 @@ class App extends React.Component {
               exact 
               path="/home"
               render={props => (
-                <LandingPage {...props}/>
+                <LandingPage {...props} appHandleLogin = {this.appHandleLogin}/>
               )}>
               </Route>
               <Route exact path="/books">
-                  <FeaturedBooks />
+                  <FeaturedBooks token = {this.state.token}/>
               </Route>
               <Route exact path="/bookdetails/:name">
                   <BookDetails />

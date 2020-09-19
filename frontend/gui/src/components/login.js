@@ -30,7 +30,6 @@ class LoginForm extends React.Component {
         const cred = this.state.credentials;
         cred[event.target.name]=event.target.value;
         this.setState({credentials: cred});
-        console.log(cred);
         
     }
 
