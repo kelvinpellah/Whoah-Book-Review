@@ -18,6 +18,7 @@ const initialState = {
     usernameError:"",
     passwordError:"",    
     confirmPasswordError:"",
+    message:""
         
     
 }
@@ -37,8 +38,7 @@ class RegistrationForm extends React.Component {
     inputChange(event){
         const cred = this.state.credentials;
         cred[event.target.name]=event.target.value;
-        this.setState({credentials: cred});
-        console.log(cred);
+        this.setState({credentials: cred,message:""});
     }
 
     // Checking correctness of the form on submission
@@ -86,19 +86,22 @@ class RegistrationForm extends React.Component {
             form.append('confirmPassword', this.state.credentials.confirmPassword);
             form.append('email', this.state.credentials.email);
             try {
-                let res = await axios({
+                let response = await axios({
                     method:'post',
-                    url:'http://127.0.0.1:8000/api/register/',
+                    url:'http://127.0.0.1:8000/api/regster/',
                     data: form,
                     headers: {'Content-Type': 'multipart/form-data'}
-                }).then(response => {
-                    this.props.handleLogin(response.data);
-                })
-                .catch(error => {
-                    console.log('Registration Error,', error);
-                })
+                });
+                this.props.handleLogin(response.data);
             } catch (error) {
-                console.log(error)
+                const usernameError = error.response.data.username;
+                const passwordError = error.response.data.password;
+                const confirmPasswordError = error.response.data.confirmPassword;
+                if(!(usernameError || passwordError || confirmPasswordError)){
+                    this.setState({message:'Failed!Check URL or Network.'});  
+                }else{
+                    this.setState({usernameError,passwordError,confirmPasswordError,message:""})
+                }
             }
 
 
@@ -121,29 +124,33 @@ class RegistrationForm extends React.Component {
     }
 
     render () {
+        const {usernameError,passwordError,confirmPasswordError,message} = this.state;
         return (
         <div>
             <Container className="center aligned">
             <Form onSubmit={this.handleSubmit}>
                 <h5>Welcome to Whoah!</h5>
                 <h6>Please create your account.</h6>
+                <div className='register_errors'>
+                    {message}
+                </div>
                 <Form.Group controlId="Username">
                     <Form.Control className="register_inputs" type="input" name="username" value={this.state.credentials.username} onChange={this.inputChange} placeholder="Username" />
                 </Form.Group>
                 <div className='register_errors'>
-                    {this.state.usernameError}
+                    {usernameError}
                 </div>
                 <Form.Group controlId="Password">
                     <Form.Control className="register_inputs" type="password" name="password" value={this.state.credentials.password} onChange={this.inputChange} placeholder="Password" />
                 </Form.Group>
                 <div className='register_errors'>
-                    {this.state.passwordError}
+                    {passwordError}
                 </div>
                 <Form.Group controlId="ConfirmPassword">
                     <Form.Control className="register_inputs" type="password" name="confirmPassword" value={this.state.credentials.confirmPassword} onChange={this.inputChange} placeholder="Confirm Password" />
                 </Form.Group>
                 <div className='register_errors'>
-                    {this.state.confirmPasswordError}
+                    {confirmPasswordError}
                 </div>
                 <Form.Group controlId="Email">
                     <Form.Control className="register_inputs" type="email" name="email" value={this.state.credentials.email} onChange={this.inputChange} placeholder="Email Address" />

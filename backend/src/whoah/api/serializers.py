@@ -31,7 +31,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'password':'Password is too short. Minimum 6 characters.'})
 
         if data['password'] != data['confirmPassword']:
-            raise serializers.ValidationError({'password': "Passwords don't match"})
+            raise serializers.ValidationError({'confirmPassword': "Passwords don't match"})
 
         return data
 

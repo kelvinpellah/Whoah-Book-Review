@@ -56,6 +56,8 @@ class CustomAuthToken(ObtainAuthToken):
             token, created = Token.objects.get_or_create(user=user)
             user_authenticate = authenticate(username = request.data.get("username"), password = request.data.get("password"))
             login(request,user_authenticate)
-            return Response({'token': token.key,'username': user.username,'email': user.email})  
+            request.session["user_id"] = user.id
+            return Response({'token': token.key,'username': user.username,'user_id': user.id})  
 
-        return Response({'error': 'Wrong username or password.'}, status=HTTP_404_NOT_FOUND)    
+        return Response({'error_message': 'Wrong username or password.'}, status=HTTP_404_NOT_FOUND)    
+

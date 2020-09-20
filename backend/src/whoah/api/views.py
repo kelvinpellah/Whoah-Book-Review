@@ -1,4 +1,6 @@
 from .serializers import RegisterUserSerializer, BookSerializer, CommentSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import filters
 from ..models import Book, BookComment
 from rest_framework import status
@@ -13,7 +15,6 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
@@ -28,10 +29,11 @@ class RegisterUserViewset(viewsets.ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        serializer_valid = serializer.is_valid()
+        if serializer_valid:
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)    
 
     def perform_create(self, serializer):
         serializer.save()     
@@ -41,6 +43,8 @@ class RegisterUserViewset(viewsets.ModelViewSet):
 class BookViewset(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsAuthenticated, ]
 
     def list(self, request):
         queryset = self.get_queryset()

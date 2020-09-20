@@ -77,7 +77,7 @@ class LoginForm extends React.Component {
             if(error.response !== "undefined"){
                 this.setState({message:response_error})}
             if(!response_error){
-                this.setState({message:'Something went wrong.Check Network.'});   
+                this.setState({message:'Failed!Check URL or Network.'});
             }
         }
 
