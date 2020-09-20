@@ -79,7 +79,6 @@ class LoginForm extends React.Component {
             if(!response_error){
                 this.setState({message:'Something went wrong.Check Network.'});   
             }
-             
         }
 
 
