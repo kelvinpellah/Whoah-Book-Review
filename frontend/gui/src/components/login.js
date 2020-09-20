@@ -12,7 +12,8 @@ import '../mystyles.css';
 const initialState = {
     credentials: {username:"", password:""},
     usernameError:"",
-    passwordError:""
+    passwordError:"",
+    message:""
 }
 class LoginForm extends React.Component {
 
@@ -29,7 +30,7 @@ class LoginForm extends React.Component {
     inputChange(event){
         const cred = this.state.credentials;
         cred[event.target.name]=event.target.value;
-        this.setState({credentials: cred});
+        this.setState({credentials: cred, message:""});
         
     }
 
@@ -64,19 +65,21 @@ class LoginForm extends React.Component {
         form.append('password', this.state.credentials.password);
 
         try {
-            let res = await axios({
+            let response = await axios({
                 method:'post',
                 url:'http://127.0.0.1:8000/api/login/',
                 data: form,
                 headers: {'Content-Type': 'multipart/form-data'}
-            }).then(response => {
-                this.props.handleLogin(response.data);
-            })
-            .catch(error => {
-                console.log('Login Error,', error);
-            })
+            });
+            this.props.handleLogin(response.data);
         } catch (error) {
-            console.log(error)
+            const response_error = error.response.data.error_message;
+            if(error.response !== "undefined"){
+                this.setState({message:response_error})}
+            if(!response_error){
+                this.setState({message:'Something went wrong.Check Network.'});   
+            }
+             
         }
 
 
@@ -99,6 +102,7 @@ class LoginForm extends React.Component {
     }
 
     render () {
+        const {usernameError,passwordError,message} = this.state;
         return (
         <div>
             <Row>
@@ -115,10 +119,10 @@ class LoginForm extends React.Component {
             <Row>
                 <Form inline>
                     <Form.Group className="mr-4 ml-2">
-                        <Form.Label className="login_errors">{this.state.usernameError}</Form.Label> 
+                        <Form.Label className="login_errors">{usernameError}{message}</Form.Label> 
                     </Form.Group>
                     <Form.Group className="ml-3">
-                        <Form.Label className="login_errors">{this.state.passwordError}</Form.Label> 
+                        <Form.Label className="login_errors">{passwordError}</Form.Label> 
                     </Form.Group>
                 </Form>
             </Row>
