@@ -59,5 +59,5 @@ class CustomAuthToken(ObtainAuthToken):
             request.session["user_id"] = user.id
             return Response({'token': token.key,'username': user.username,'user_id': user.id})  
 
-        return Response({'error': 'Wrong username or password.'}, status=HTTP_404_NOT_FOUND)    
+        return Response({'error_message': 'Wrong username or password.'}, status=HTTP_404_NOT_FOUND)    
 
