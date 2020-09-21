@@ -234,7 +234,7 @@ function BookDetails(props){
                             {message}
                             {results}
                         </div>
-                        <div>
+                        <div className='comment-section'>
                             <Form >
                                 <h4>Would you like to comment on this book?</h4>
                                 <Form.Group ControlID="commentID">

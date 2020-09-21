@@ -88,7 +88,7 @@ class RegistrationForm extends React.Component {
             try {
                 let response = await axios({
                     method:'post',
-                    url:'http://127.0.0.1:8000/api/regster/',
+                    url:'http://127.0.0.1:8000/api/register/',
                     data: form,
                     headers: {'Content-Type': 'multipart/form-data'}
                 });

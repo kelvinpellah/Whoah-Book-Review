@@ -22,8 +22,7 @@ class LandingPage extends React.Component {
 
     render() {
         return(
-            <div className="page-container">
-                <div className="content-wrap">
+            <div className='landing-page'>
                 <Navbar className = 'landing-nav' >
                 <Navbar.Brand href="#home">
                     <img
@@ -43,7 +42,6 @@ class LandingPage extends React.Component {
                         <RegistrationForm handleLogin={this.handleLogin}/>
                     </Card.Body>
                 </Card>
-                </div>
             </div>
         )
     }
