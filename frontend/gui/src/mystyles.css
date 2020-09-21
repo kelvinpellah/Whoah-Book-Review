@@ -1,25 +1,32 @@
 
-/* Landing Page */
-
-App {
-    text-align: center;
-  }
   
   .page-container {
     display:flex;
     flex-direction: column;
     min-height: 100vh;
-    background-image: url('./images/background.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: rgb(85, 6, 6, 0.6);
   }
   
   .content-wrap {
     flex:1;
   }
+
+  .footer {
+      background:rgba(100, 35, 4, 0.5);
+      margin-top: auto;
+      padding: 3em;
+      color: white;
+      text-align: center;
+  }
   
+.landing-page {
+    background-image: url('./images/background.jpg'); 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgb(85, 6, 6, 0.6);
+
+} 
+
 .landing-nav {
     background:rgb(209, 202, 202, 0.9);
     height: 90px;

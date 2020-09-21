@@ -4,6 +4,7 @@ import {Route, Switch} from "react-router-dom";
 import LandingPage from "./components/landingpage";
 import FeaturedBooks from './components/books';
 import BookDetails from './components/bookdetails';
+import Footer from './components/footer';
 
 class App extends React.Component {
   constructor(props) {
@@ -23,22 +24,25 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <div className='App'>
-          <Switch>
-              <Route 
-              exact 
-              path="/home"
-              render={props => (
-                <LandingPage {...props} appHandleLogin = {this.appHandleLogin}/>
-              )}>
-              </Route>
-              <Route exact path="/books">
-                  <FeaturedBooks token = {this.state.token}/>
-              </Route>
-              <Route exact path="/bookdetails/:name">
-                  <BookDetails />
-              </Route>
-          </Switch>
+        <div className='page-container'>
+          <div className='Content-wrap'>
+            <Switch>
+                <Route 
+                exact 
+                path="/home"
+                render={props => (
+                  <LandingPage {...props} appHandleLogin = {this.appHandleLogin}/>
+                )}>
+                </Route>
+                <Route exact path="/books">
+                    <FeaturedBooks token = {this.state.token}/>
+                </Route>
+                <Route exact path="/bookdetails/:name">
+                    <BookDetails />
+                </Route>
+            </Switch>
+          </div>
+          <Footer />
       </div>
       </Router>
     );
