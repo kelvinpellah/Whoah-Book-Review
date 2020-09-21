@@ -11,10 +11,10 @@
   }
 
   .footer {
-      background:rgba(100, 35, 4, 0.5);
+      background:rgba(126, 101, 101, 0.418);
       margin-top: auto;
       padding: 3em;
-      color: white;
+      color: rgb(19, 16, 16);
       text-align: center;
   }
   
@@ -24,6 +24,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-color: rgb(85, 6, 6, 0.6);
+    min-height: 100vh;
 
 } 
 
