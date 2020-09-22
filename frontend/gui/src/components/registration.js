@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
+import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../mystyles.css';
@@ -18,7 +19,8 @@ const initialState = {
     usernameError:"",
     passwordError:"",    
     confirmPasswordError:"",
-    message:""
+    message:"",
+    loading:false
         
     
 }
@@ -38,7 +40,7 @@ class RegistrationForm extends React.Component {
     inputChange(event){
         const cred = this.state.credentials;
         cred[event.target.name]=event.target.value;
-        this.setState({credentials: cred,message:""});
+        this.setState({credentials: cred,message:"",loading:false});
     }
 
     // Checking correctness of the form on submission
@@ -66,7 +68,7 @@ class RegistrationForm extends React.Component {
 
         // Update state and Return the errors.
         if ( usernameError || passwordError || confirmPasswordError) {
-            this.setState({usernameError, passwordError,confirmPasswordError });
+            this.setState({usernameError, passwordError,confirmPasswordError,loading:false });
             return false;
         }
 
@@ -93,19 +95,27 @@ class RegistrationForm extends React.Component {
                     headers: {'Content-Type': 'multipart/form-data'}
                 });
                 this.props.handleLogin(response.data);
+                // Clear form after successfully submission.
+                this.setState(initialState);
             } catch (error) {
-                const usernameError = error.response.data.username;
-                const passwordError = error.response.data.password;
-                const confirmPasswordError = error.response.data.confirmPassword;
-                if(!(usernameError || passwordError || confirmPasswordError)){
-                    this.setState({message:'Failed!Check URL or Network.'});  
+                const response_error = error.response;
+                if(response_error){
+                    const usernameError = error.response.data.username;
+                    const passwordError = error.response.data.password;
+                    const confirmPasswordError = error.response.data.confirmPassword;
+                    if(usernameError||passwordError||confirmPasswordError){
+                        this.setState({usernameError,passwordError,confirmPasswordError,loading:false}); 
+                    }else{
+                        this.setState({message:"Failed! Check URL or Internet connection.",loading:false});
+                    }
                 }else{
-                    this.setState({usernameError,passwordError,confirmPasswordError,message:""})
+                    this.setState({message:'Failed!You must start server.',loading:false,usernameError:'',passwordError:'',confirmPasswordError:''});
                 }
             }
 
 
     }
+
     
     // Form submission
 
@@ -113,18 +123,16 @@ class RegistrationForm extends React.Component {
         event.preventDefault();
         const isValid = this.validateForm();
         if (isValid) {
+            this.setState({loading:true})
             
             //send data to REST API
             this.sendData();
-            
-            // Clear form after successfully submission.
-            this.setState(initialState);
         }
         
     }
 
     render () {
-        const {usernameError,passwordError,confirmPasswordError,message} = this.state;
+        const {usernameError,passwordError,confirmPasswordError,message,loading} = this.state;
         return (
         <div>
             <Container className="center aligned">
@@ -133,7 +141,9 @@ class RegistrationForm extends React.Component {
                 <h6>Please create your account.</h6>
                 <div className='register_errors'>
                     {message}
+                    <Spinner animation="border" variant="info" className={loading? 'spinner-show':'spinner-hide'}/>
                 </div>
+                
                 <Form.Group controlId="Username">
                     <Form.Control className="register_inputs" type="input" name="username" value={this.state.credentials.username} onChange={this.inputChange} placeholder="Username" />
                 </Form.Group>

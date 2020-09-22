@@ -3,6 +3,7 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
+import Spinner from 'react-bootstrap/Spinner';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../mystyles.css';
 
@@ -13,7 +14,8 @@ const initialState = {
     credentials: {username:"", password:""},
     usernameError:"",
     passwordError:"",
-    message:""
+    message:"",
+    loading:false
 }
 class LoginForm extends React.Component {
 
@@ -48,7 +50,7 @@ class LoginForm extends React.Component {
 
         // Return errors
         if(usernameError || passwordError) {
-            this.setState({usernameError,passwordError});
+            this.setState({usernameError,passwordError,loading:false});
             return false;
         }
 
@@ -72,12 +74,19 @@ class LoginForm extends React.Component {
                 headers: {'Content-Type': 'multipart/form-data'}
             });
             this.props.handleLogin(response.data);
+            // Clear form after successfully submission.
+            this.setState(initialState);
         } catch (error) {
-            const response_error = error.response.data.error_message;
-            if(error.response !== "undefined"){
-                this.setState({message:response_error})}
-            if(!response_error){
-                this.setState({message:'Failed!Check URL or Network.'});
+            const response_error = error.response
+            if(response_error){
+                const error_message = response_error.data.error_message;
+                if (error_message){
+                    this.setState({message:error_message,loading:false,usernameError:'',passwordError:''});
+                }else{
+                    this.setState({message:"Failed! Check URL or Internet connection.",loading:false});
+                }
+            }else{
+                this.setState({message:'Failed!You must start server.',loading:false,usernameError:'',passwordError:''});
             }
         }
 
@@ -90,18 +99,15 @@ class LoginForm extends React.Component {
         event.preventDefault();
         const isValid = this.validateForm();
         if (isValid) {
-            
+            this.setState({loading:true});
             //send data to REST API
             this.sendData();
-            
-            // Clear form after successfully submission.
-            this.setState(initialState);
         }
         
     }
 
     render () {
-        const {usernameError,passwordError,message} = this.state;
+        const {usernameError,passwordError,message,loading} = this.state;
         return (
         <div>
             <Row>
@@ -118,7 +124,12 @@ class LoginForm extends React.Component {
             <Row>
                 <Form inline>
                     <Form.Group className="mr-4 ml-2">
-                        <Form.Label className="login_errors">{usernameError}{message}</Form.Label> 
+                        <Form.Label className="login_errors">
+                            {usernameError}
+                            {message}
+                            <Spinner animation="border" variant="info" className={loading? 'spinner-show':'spinner-hide'}/>
+                        </Form.Label> 
+                        
                     </Form.Group>
                     <Form.Group className="ml-3">
                         <Form.Label className="login_errors">{passwordError}</Form.Label> 
