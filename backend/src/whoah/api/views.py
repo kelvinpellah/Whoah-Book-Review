@@ -1,4 +1,5 @@
 from .serializers import RegisterUserSerializer, BookSerializer, CommentSerializer
+from django.contrib.auth import authenticate, login
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import filters
@@ -31,12 +32,17 @@ class RegisterUserViewset(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer_valid = serializer.is_valid()
         if serializer_valid:
-            self.perform_create(serializer)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            user = self.perform_create(serializer)
+            token, created = Token.objects.get_or_create(user=user)
+            user_authenticate = authenticate(username = request.data.get("username"), password = request.data.get("password"))
+            login(request,user_authenticate)
+            request.session["user_id"] = user.id
+            return Response({'token': token.key,'username': user.username,'user_id': user.id}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)    
 
     def perform_create(self, serializer):
-        serializer.save()     
+        user = serializer.save()
+        return user
 
 
 # Load featured books after login
