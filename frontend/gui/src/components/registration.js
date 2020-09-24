@@ -20,6 +20,7 @@ const initialState = {
     passwordError:"",    
     confirmPasswordError:"",
     message:"",
+    success:'',
     loading:false
         
     
@@ -94,9 +95,15 @@ class RegistrationForm extends React.Component {
                     data: form,
                     headers: {'Content-Type': 'multipart/form-data'}
                 });
-                this.props.handleLogin(response.data);
+                this.setState({success:'Account created successfully.\nRedirecting...',loading:false});
+                //delay next operation to display the success text above.
+                setTimeout(() => {
+                    this.props.handleLogin(response.data);
+                },3000);
                 // Clear form after successfully submission.
-                this.setState(initialState);
+                setTimeout(() => {
+                    this.setState(initialState);
+                },3000);
             } catch (error) {
                 const response_error = error.response;
                 if(response_error){
@@ -132,13 +139,16 @@ class RegistrationForm extends React.Component {
     }
 
     render () {
-        const {usernameError,passwordError,confirmPasswordError,message,loading} = this.state;
+        const {usernameError,passwordError,confirmPasswordError,message,loading,success} = this.state;
         return (
         <div>
             <Container className="center aligned">
             <Form onSubmit={this.handleSubmit}>
                 <h5>Welcome to Whoah!</h5>
                 <h6>Please create your account.</h6>
+                <div className="success-register">
+                    {success}
+                </div>
                 <div className='register_errors'>
                     {message}
                     <Spinner animation="border" variant="info" className={loading? 'spinner-show':'spinner-hide'}/>
