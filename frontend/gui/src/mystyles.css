@@ -93,6 +93,10 @@
     font-size: 15px;
 }
 
+.success-register {
+    color: green;
+}
+
 ::placeholder { 
     color: #050405;
     font-size: 15px;

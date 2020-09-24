@@ -17,6 +17,7 @@ class App extends React.Component {
 
   appHandleLogin = (data) => {
     const token = data.token;
+    localStorage.setItem('token',token);
     this.setState({token});
   }
   
@@ -28,14 +29,17 @@ class App extends React.Component {
           <div className='Content-wrap'>
             <Switch>
                 <Route 
-                exact 
-                path="/home"
+                exact path={["/",'/home']}
                 render={props => (
                   <LandingPage {...props} appHandleLogin = {this.appHandleLogin}/>
                 )}>
                 </Route>
-                <Route exact path="/books">
-                    <FeaturedBooks token = {this.state.token}/>
+                <Route 
+                exact path="/books"
+                render = {props => (
+                  <FeaturedBooks {...props} token = {this.state.token}/>
+                )}>
+                    
                 </Route>
                 <Route exact path="/bookdetails/:name">
                     <BookDetails />
