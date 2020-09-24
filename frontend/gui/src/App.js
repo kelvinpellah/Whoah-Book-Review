@@ -28,8 +28,7 @@ class App extends React.Component {
           <div className='Content-wrap'>
             <Switch>
                 <Route 
-                exact 
-                path="/home"
+                exact path={["/",'/home']}
                 render={props => (
                   <LandingPage {...props} appHandleLogin = {this.appHandleLogin}/>
                 )}>
