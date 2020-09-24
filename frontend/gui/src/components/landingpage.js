@@ -20,6 +20,16 @@ class LandingPage extends React.Component {
         this.props.history.push('/books');
     }
 
+    componentDidMount(){
+        const token = localStorage.getItem('token');
+        if(token){
+          const data = {token:token};
+          this.props.appHandleLogin(data);
+          return this.props.history.push('/books');
+        }
+        
+      }
+
     render() {
         return(
             <div className='landing-page'>

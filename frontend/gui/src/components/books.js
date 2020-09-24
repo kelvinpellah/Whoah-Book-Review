@@ -94,12 +94,16 @@ class FeaturedBooks extends React.Component {
 
     componentDidMount(){
         const token = this.props.token;
-        this.setState({
-            loading:true,
-            message:'',
-            books:''
-        });
-        this.bookList(token);
+        if(token){
+            this.setState({
+                loading:true,
+                message:'',
+                books:''
+            });
+            this.bookList(token);
+        }else{
+            return this.props.history.push('/');
+        }
     }
 
     render() {
