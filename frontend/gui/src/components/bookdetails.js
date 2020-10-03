@@ -14,6 +14,7 @@ import Book from "../images/book.jpg";
 
 // Generate Card inputs for comment results.
 function CommentList(props) {
+  props.loggedUser(props.commenter);
   return (
     <Card className="comment_card">
       <Card.Body>
@@ -98,11 +99,20 @@ function BookDetails(props) {
   const [comment, setComment] = useState("");
   const [commentLoading, setCommentLoading] = useState(false);
   const [commentError, setCommentError] = useState("");
+  const [sameName, setCommentForm] = useState(false);
   // retrieve from session
   const [session_bookTitle, setTitle] = useState("");
   const [session_author, setAuthor] = useState("");
   const [session_yearPublished, setYear] = useState("");
 
+  function handleCommentForm(data) {
+    const commentUser = data;
+    const local_username = localStorage.getItem("username");
+    const logged_user = props.username ? props.username : local_username;
+    if (commentUser === logged_user) {
+      setCommentForm(true);
+    }
+  }
   // handle comment Results
 
   function handleCommentResults(results) {
@@ -113,6 +123,7 @@ function BookDetails(props) {
             key={result.id}
             commenter={result.commenter}
             comment={result.comment}
+            loggedUser={handleCommentForm}
           />
         ))
       );
@@ -241,12 +252,12 @@ function BookDetails(props) {
   //        setComment('');
   //    }
   //}
-  const sendData = async () =>{
+  const sendData = async () => {
     var form = new FormData();
-    const local_username = localStorage.getItem('username');
-    form.append("book",bookTitle ? bookTitle : session_bookTitle);
-    form.append("comment",comment);
-    form.append("commenter",props.username?props.username:local_username);
+    const local_username = localStorage.getItem("username");
+    form.append("book", bookTitle ? bookTitle : session_bookTitle);
+    form.append("comment", comment);
+    form.append("commenter", props.username ? props.username : local_username);
     try {
       let response = await axios({
         method: "post",
@@ -257,16 +268,17 @@ function BookDetails(props) {
       setMessageComment("Thank your for your comment.");
       setCommentLoading(false);
       setTimeout(() => {
-        setMessageComment('');
-        setComment('');
+        setMessageComment("");
+        setCommentForm(true);
+        setComment("");
       }, 3000);
     } catch (error) {
       console.log(error.response);
-        setCommentError("Failed!Try again later.");
-        setCommentLoading(false);
-        setMessageComment('');
+      setCommentError("Failed!Try again later.");
+      setCommentLoading(false);
+      setMessageComment("");
     }
-  }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -331,7 +343,10 @@ function BookDetails(props) {
           {results}
         </div>
         <div className="comment-section">
-          <Form onSubmit={handleSubmit}>
+          <Form
+            onSubmit={handleSubmit}
+            className={sameName ? "hide-comment" : ""}
+          >
             <h4>Would you like to comment on this book?</h4>
             <div className="register_errors">{commentError}</div>
             <div className="success-register">
@@ -339,7 +354,7 @@ function BookDetails(props) {
               <Spinner
                 animation="border"
                 variant="info"
-                className={commentLoading? "spinner-show" : "spinner-hide"}
+                className={commentLoading ? "spinner-show" : "spinner-hide"}
               />
             </div>
             <Form.Group ControlID="commentID">
