@@ -94,6 +94,8 @@ function BookDetails(props) {
   const [results, setResults] = useState("");
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [comment,setComment] = useState('');
+  const [commentError,setCommentError] = useState('');
   // retrieve from session
   const [session_bookTitle, setTitle] = useState("");
   const [session_author, setAuthor] = useState("");
@@ -234,7 +236,20 @@ function BookDetails(props) {
   //        setComment('');
   //    }
   //}
-
+  const handleSubmit = event =>{
+    event.preventDefault();
+    let commentError ='';
+    let commentError1 = '';
+    let commentError2 = '';
+    commentError1 = `${!comment.length? 'Please write a comment.':''}`;
+    commentError2 = `${comment.length < 4? 'Comment is too short.':''}`;
+    commentError =`${commentError1? commentError1:commentError2}`;
+    if(commentError){
+      setCommentError(commentError);
+    }else{
+      console.log('no error');
+    }
+  }
   return (
     <div>
       <Navbar className="book_nav">
@@ -283,12 +298,19 @@ function BookDetails(props) {
           {results}
         </div>
         <div className="comment-section">
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <h4>Would you like to comment on this book?</h4>
+            <div className="register_errors">{commentError}</div>
             <Form.Group ControlID="commentID">
               <Form.Control
                 placeholder="Leave your comments here"
                 type="textarea"
+                name ='comment'
+                value = {comment}
+                onChange={(event)=>{
+                  setComment(event.target.value);
+                  setCommentError('');
+                }}
               />
             </Form.Group>
             <Button variant="primary" type="submit">
