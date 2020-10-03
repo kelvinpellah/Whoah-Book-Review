@@ -10,15 +10,18 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      token:''
+      token:'',
+      username:''
     }
     this.appHandleLogin = this.appHandleLogin.bind(this);
   }
 
   appHandleLogin = (data) => {
     const token = data.token;
+    const username = data.username;
     localStorage.setItem('token',token);
-    this.setState({token});
+    localStorage.setItem('username',username);
+    this.setState({token,username});
   }
   
 
@@ -41,8 +44,9 @@ class App extends React.Component {
                 )}>
                     
                 </Route>
-                <Route exact path="/bookdetails/:name">
-                    <BookDetails />
+                <Route exact path="/bookdetails/:name"
+                render={props =>(
+                    <BookDetails {...props} username={this.state.username}/>)}>
                 </Route>
             </Switch>
           </div>

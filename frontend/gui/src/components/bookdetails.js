@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
-import { useLocation,useHistory } from "react-router";
+import { useLocation, useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import Logo from "../images/logo.png";
 import axios from "axios";
@@ -94,8 +94,10 @@ function BookDetails(props) {
   const [results, setResults] = useState("");
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
-  const [comment,setComment] = useState('');
-  const [commentError,setCommentError] = useState('');
+  const [messageComment, setMessageComment] = useState("");
+  const [comment, setComment] = useState("");
+  const [commentLoading, setCommentLoading] = useState(false);
+  const [commentError, setCommentError] = useState("");
   // retrieve from session
   const [session_bookTitle, setTitle] = useState("");
   const [session_author, setAuthor] = useState("");
@@ -158,7 +160,8 @@ function BookDetails(props) {
       setLoading(true);
       setMessage("");
       setResults("");
-    } try {
+    }
+    try {
       const bookDetails = sessionStorage.getItem("bookDetails");
       const book = JSON.parse(bookDetails);
       const session_bookTitle = book.title;
@@ -171,11 +174,13 @@ function BookDetails(props) {
       setLoading(true);
       setMessage("");
       setResults("");
-    } catch(error){
-      setMessage('Something went wrong.Redirecting to search.')
+    } catch (error) {
+      setMessage("Something went wrong.Redirecting to search.");
       setLoading(false);
       setResults("");
-      setTimeout(()=>{history.push('/');},3000);
+      setTimeout(() => {
+        history.push("/");
+      }, 3000);
     }
   }, [bookTitle]);
 
@@ -236,20 +241,48 @@ function BookDetails(props) {
   //        setComment('');
   //    }
   //}
-  const handleSubmit = event =>{
-    event.preventDefault();
-    let commentError ='';
-    let commentError1 = '';
-    let commentError2 = '';
-    commentError1 = `${!comment.length? 'Please write a comment.':''}`;
-    commentError2 = `${comment.length < 4? 'Comment is too short.':''}`;
-    commentError =`${commentError1? commentError1:commentError2}`;
-    if(commentError){
-      setCommentError(commentError);
-    }else{
-      console.log('no error');
+  const sendData = async () =>{
+    var form = new FormData();
+    const local_username = localStorage.getItem('username');
+    form.append("book",bookTitle ? bookTitle : session_bookTitle);
+    form.append("comment",comment);
+    form.append("commenter",props.username?props.username:local_username);
+    try {
+      let response = await axios({
+        method: "post",
+        url: "http://127.0.0.1:8000/api/comment/",
+        data: form,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setMessageComment("Thank your for your comment.");
+      setCommentLoading(false);
+      setTimeout(() => {
+        setMessageComment('');
+        setComment('');
+      }, 3000);
+    } catch (error) {
+      console.log(error.response);
+        setCommentError("Failed!Try again later.");
+        setCommentLoading(false);
+        setMessageComment('');
     }
   }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let commentError = "";
+    let commentError1 = "";
+    let commentError2 = "";
+    commentError1 = `${!comment.length ? "Please write a comment." : ""}`;
+    commentError2 = `${comment.length < 4 ? "Comment is too short." : ""}`;
+    commentError = `${commentError1 ? commentError1 : commentError2}`;
+    if (commentError) {
+      setCommentError(commentError);
+    } else {
+      setCommentLoading(true);
+      sendData();
+    }
+  };
   return (
     <div>
       <Navbar className="book_nav">
@@ -301,15 +334,23 @@ function BookDetails(props) {
           <Form onSubmit={handleSubmit}>
             <h4>Would you like to comment on this book?</h4>
             <div className="register_errors">{commentError}</div>
+            <div className="success-register">
+              {messageComment}
+              <Spinner
+                animation="border"
+                variant="info"
+                className={commentLoading? "spinner-show" : "spinner-hide"}
+              />
+            </div>
             <Form.Group ControlID="commentID">
               <Form.Control
                 placeholder="Leave your comments here"
                 type="textarea"
-                name ='comment'
-                value = {comment}
-                onChange={(event)=>{
+                name="comment"
+                value={comment}
+                onChange={(event) => {
                   setComment(event.target.value);
-                  setCommentError('');
+                  setCommentError("");
                 }}
               />
             </Form.Group>
