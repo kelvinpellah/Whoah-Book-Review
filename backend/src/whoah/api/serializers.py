@@ -71,6 +71,11 @@ class CommentSerializer(serializers.ModelSerializer):
         model = BookComment
         fields = ['id',"comment","commenter","book"]
 
+    def validate(self, data):
+        if len(data['comment']) < 4:
+            raise serializers.ValidationError({'comment':'Comment is too short.Minimum 4 characters.'})
+        return data
+
     # Add new comments
     def create(self,validated_data):
         comment = BookComment.objects.create(

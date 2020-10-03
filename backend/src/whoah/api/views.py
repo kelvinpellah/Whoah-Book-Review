@@ -93,6 +93,8 @@ class CommentViewset(viewsets.ModelViewSet):
 
     def create(self,request,*args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        serializer_valid = serializer.is_valid(raise_exception=True)
+        if serializer_valid:
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND) 
