@@ -24,21 +24,24 @@ from rest_framework.status import (
 )
 
 # Register viewset
+
+
 class RegisterUserViewset(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = RegisterUserSerializer
-    
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer_valid = serializer.is_valid()
         if serializer_valid:
             user = self.perform_create(serializer)
             token, created = Token.objects.get_or_create(user=user)
-            user_authenticate = authenticate(username = request.data.get("username"), password = request.data.get("password"))
-            login(request,user_authenticate)
+            user_authenticate = authenticate(username=request.data.get(
+                "username"), password=request.data.get("password"))
+            login(request, user_authenticate)
             request.session["user_id"] = user.id
-            return Response({'token': token.key,'username': user.username,'user_id': user.id}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)    
+            return Response({'token': token.key, 'username': user.username, 'user_id': user.id}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
     def perform_create(self, serializer):
         user = serializer.save()
@@ -55,7 +58,8 @@ class BookViewset(viewsets.ModelViewSet):
     def list(self, request):
         queryset = self.get_queryset()
         serializer = BookSerializer(queryset, many=True)
-        random_books = random.choices(serializer.data, k=12) # Pick 12 random books
+        random_books = random.choices(
+            serializer.data, k=12)  # Pick 12 random books
         books = []
         i = 1
         for book in random_books:
@@ -63,9 +67,11 @@ class BookViewset(viewsets.ModelViewSet):
                 books.append(book)
                 i += 1
                 break
-        return Response(books) # Return 12 books
+        return Response(books)  # Return 12 books
 
 # Search for a book
+
+
 class BookSearchViewset(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
@@ -78,23 +84,25 @@ class BookDetailsViewset(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-    def retrieve(self,request,pk=None):
+    def retrieve(self, request, pk=None):
         queryset = self.get_queryset()
         book = get_object_or_404(queryset, pk=pk)
         serializer = BookSerializer(book)
         return Response(serializer.data)
 
 # Handling book comments
+
+
 class CommentViewset(viewsets.ModelViewSet):
-    queryset = BookComment.objects.all()  
+    queryset = BookComment.objects.all()
     serializer_class = CommentSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['book__title']
 
-    def create(self,request,*args, **kwargs):
+    def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer_valid = serializer.is_valid(raise_exception=True)
         if serializer_valid:
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND) 
+        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
