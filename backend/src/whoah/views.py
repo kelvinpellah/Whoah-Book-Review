@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.status import (
@@ -53,6 +53,9 @@ class CustomAuthToken(ObtainAuthToken):
         serializer_valid = serializer.is_valid()
         if serializer_valid:
             user = serializer.validated_data['user']
+            if 'user_id' in request.session.keys():
+                logout(request)
+                return Response({'success':"You are logged out."})
             token, created = Token.objects.get_or_create(user=user)
             user_authenticate = authenticate(username = request.data.get("username"), password = request.data.get("password"))
             login(request,user_authenticate)
