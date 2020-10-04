@@ -53,14 +53,14 @@ class CustomAuthToken(ObtainAuthToken):
         serializer_valid = serializer.is_valid()
         if serializer_valid:
             user = serializer.validated_data['user']
-            if 'user_id' in request.session.keys():
-                logout(request)
-                return Response({'success':"You are logged out."})
             token, created = Token.objects.get_or_create(user=user)
             user_authenticate = authenticate(username = request.data.get("username"), password = request.data.get("password"))
             login(request,user_authenticate)
             request.session["user_id"] = user.id
             return Response({'token': token.key,'username': user.username,'user_id': user.id})  
-
-        return Response({'error_message': 'Wrong username or password.'}, status=HTTP_404_NOT_FOUND)    
+        if 'user_id' in request.session.keys():
+            logout(request)
+            return Response({'success':"You are logged out."})
+        else:    
+            return Response({'error_message': 'Wrong username or password.'}, status=HTTP_404_NOT_FOUND)    
 
