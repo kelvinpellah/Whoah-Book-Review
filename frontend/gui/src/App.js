@@ -5,6 +5,7 @@ import LandingPage from "./components/landingpage";
 import FeaturedBooks from "./components/books";
 import BookDetails from "./components/bookdetails";
 import Footer from "./components/footer";
+import axios from "axios";
 
 class App extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class App extends React.Component {
     localStorage.setItem("token", token);
     localStorage.setItem("username", username);
     this.setState({ token, username });
-  };
+  }
 
   render() {
     return (

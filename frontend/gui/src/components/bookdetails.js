@@ -295,6 +295,27 @@ function BookDetails(props) {
       sendData();
     }
   };
+
+  const handleLogout = async () => {
+    const stored_token = localStorage.getItem('token');
+    const data = new FormData()
+    data.append('token',stored_token)
+    try {
+      let response = await axios({
+        url:'http://127.0.0.1:8000/api/logout/',
+        method:'post',
+        data:data
+      });
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      setTimeout(() => {
+        history.push("/home");
+      }, 2000);
+ 
+    } catch (error) {
+      console.log('the error is',error.response)
+    } 
+  }
   return (
     <div>
       <Navbar className="book_nav">
@@ -309,6 +330,9 @@ function BookDetails(props) {
             />
           </Navbar.Brand>
         </Link>
+            <Button variant="secondary" onClick={handleLogout} className="logout-btn" type="submit">
+              Logout
+            </Button>
       </Navbar>
       <Container>
         <Card className="book_card">

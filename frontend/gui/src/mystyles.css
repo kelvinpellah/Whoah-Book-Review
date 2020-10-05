@@ -128,7 +128,7 @@
 }
 
 .book_nav {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     height: 90px;
     overflow: visible;
     background: rgb(209, 202, 202, 0.9);
@@ -138,6 +138,12 @@
     position: absolute;
     right:0;
 
+}
+
+.logout-btn {
+    position: absolute;
+    right:0;
+    margin-right: 6px;
 }
 
 .book-search-card {
