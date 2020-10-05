@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login,logout
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
@@ -64,3 +65,11 @@ class CustomAuthToken(ObtainAuthToken):
         else:    
             return Response({'error_message': 'Wrong username or password.'}, status=HTTP_404_NOT_FOUND)    
 
+
+@api_view(['GET','POST'])
+def logout_view(request):
+    if 'user_id' in request.session.keys():
+        del request.session['user_id']
+        logout(request)
+        return Response({'success':'You are logged out.'})
+    return Response({'error':'Log in first.'})    
