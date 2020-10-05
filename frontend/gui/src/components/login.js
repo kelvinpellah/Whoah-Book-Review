@@ -73,9 +73,9 @@ class LoginForm extends React.Component {
                 data: form,
                 headers: {'Content-Type': 'multipart/form-data'}
             });
-            this.props.handleLogin(response.data);
             // Clear form after successfully submission.
             this.setState(initialState);
+            this.props.handleLogin(response.data);
         } catch (error) {
             const response_error = error.response
             if(response_error){

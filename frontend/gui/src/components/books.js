@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
+import Button from "react-bootstrap/Button";
 import axios from "axios";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
@@ -107,6 +108,27 @@ class FeaturedBooks extends React.Component {
     }
   }
 
+  handleLogout = async () => {
+    const stored_token = localStorage.getItem('token');
+    const data = new FormData()
+    data.append('token',stored_token)
+    try {
+      let response = await axios({
+        url:'http://127.0.0.1:8000/api/logout/',
+        method:'post',
+        data:data
+      });
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      setTimeout(() => {
+        this.props.history.push("/home");
+      }, 2000);
+ 
+    } catch (error) {
+      console.log('the error is',error.response)
+    } 
+  }
+
   render() {
     const { books, loading, message } = this.state;
     return (
@@ -123,6 +145,9 @@ class FeaturedBooks extends React.Component {
               />
             </Navbar.Brand>
           </Link>
+            <Button onClick={this.handleLogout} variant="secondary" className="logout-btn" type="submit">
+              Logout
+            </Button>
         </Navbar>
           <div className="book_search">
             <BookSearch />
