@@ -128,7 +128,7 @@ class BookSearch extends React.Component {
                 placeholder="Search by title, author etc"
               />
             </Form.Group>
-            <Button className="ml-2" type="submit">
+            <Button className="ml-2 mr-4" type="submit">
               Search
             </Button>
           </Form>

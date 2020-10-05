@@ -123,10 +123,10 @@ class FeaturedBooks extends React.Component {
               />
             </Navbar.Brand>
           </Link>
+        </Navbar>
           <div className="book_search">
             <BookSearch />
           </div>
-        </Navbar>
         <Container>
           <h3>Recommended books for you:</h3>
           <Spinner
