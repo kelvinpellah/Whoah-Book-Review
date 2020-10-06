@@ -100,6 +100,7 @@ function BookDetails(props) {
   const [commentLoading, setCommentLoading] = useState(false);
   const [commentError, setCommentError] = useState("");
   const [sameName, setCommentForm] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
   // retrieve from session
   const [session_bookTitle, setTitle] = useState("");
   const [session_author, setAuthor] = useState("");
@@ -297,25 +298,23 @@ function BookDetails(props) {
   };
 
   const handleLogout = async () => {
-    const stored_token = localStorage.getItem('token');
-    const data = new FormData()
-    data.append('token',stored_token)
+    const stored_token = localStorage.getItem("token");
+    const data = new FormData();
+    data.append("token", stored_token);
     try {
       let response = await axios({
-        url:'http://127.0.0.1:8000/api/logout/',
-        method:'post',
-        data:data
+        url: "http://127.0.0.1:8000/api/logout/",
+        method: "post",
+        data: data,
       });
-      localStorage.removeItem('token');
-      localStorage.removeItem('username');
-      setTimeout(() => {
-        history.push("/home");
-      }, 2000);
- 
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      props.isAuthenticated();
+      history.push("/home");
     } catch (error) {
-      console.log('the error is',error.response)
-    } 
-  }
+      setLogoutError("Failed to logout.Try again.");
+    }
+  };
   return (
     <div>
       <Navbar className="book_nav">
@@ -330,9 +329,14 @@ function BookDetails(props) {
             />
           </Navbar.Brand>
         </Link>
-            <Button variant="secondary" onClick={handleLogout} className="logout-btn" type="submit">
-              Logout
-            </Button>
+        <Button
+          variant="secondary"
+          onClick={handleLogout}
+          className="logout-btn"
+          type="submit"
+        >
+          Logout
+        </Button>
       </Navbar>
       <Container>
         <Card className="book_card">
@@ -357,6 +361,7 @@ function BookDetails(props) {
         </h4>
         <hr />
         <div className="comment_display">
+          <div className="register_errors">{logoutError}</div>
           <h4>Comments from readers:</h4>
           <Spinner
             animation="border"

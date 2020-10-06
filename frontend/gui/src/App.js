@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Redirect } from "react-router-dom";
 import { Route, Switch } from "react-router-dom";
 import LandingPage from "./components/landingpage";
 import FeaturedBooks from "./components/books";
@@ -13,6 +13,7 @@ class App extends React.Component {
     this.state = {
       token: "",
       username: "",
+      isAuthenticated:false
     };
     this.appHandleLogin = this.appHandleLogin.bind(this);
   }
@@ -22,7 +23,7 @@ class App extends React.Component {
     const username = data.username;
     localStorage.setItem("token", token);
     localStorage.setItem("username", username);
-    this.setState({ token, username });
+    this.setState({ token, username,isAuthenticated:true });
   }
 
   render() {
@@ -49,6 +50,8 @@ class App extends React.Component {
                     {...props}
                     token={this.state.token}
                     username={this.state.username}
+                    removeToken={()=>{this.setState({token:'',username:''})}}
+                    isAuthenticated={()=>{this.setState({isAuthenticated:false})}}
                   />
                 )}
               ></Route>
@@ -56,8 +59,10 @@ class App extends React.Component {
                 exact
                 path="/bookdetails/:name"
                 render={(props) => (
-                  <BookDetails {...props} username={this.state.username} />
-                )}
+                  this.state.isAuthenticated?
+                  <BookDetails {...props} isAuthenticated={()=>{this.setState({isAuthenticated:false})}} username={this.state.username} removeToken={()=>{this.setState({token:'',username:''})}}/>
+                  :<Redirect to='/' />
+                  )}
               ></Route>
             </Switch>
           </div>

@@ -44,6 +44,7 @@ class FeaturedBooks extends React.Component {
       books: "",
       loading: false,
       message: "",
+      logoutError:''
     };
   }
 
@@ -62,6 +63,7 @@ class FeaturedBooks extends React.Component {
       )),
       loading: false,
       message: "",
+      logoutError:''
     });
   }
 
@@ -83,6 +85,7 @@ class FeaturedBooks extends React.Component {
             books: "",
             message: "Failed to fetch featured books. Check Network.",
             loading: false,
+            logoutError:''
           });
         });
     } catch (error) {
@@ -90,6 +93,7 @@ class FeaturedBooks extends React.Component {
         books: "",
         message: "Something went wrong.",
         loading: false,
+        logoutError:''
       });
     }
   };
@@ -101,36 +105,36 @@ class FeaturedBooks extends React.Component {
         loading: true,
         message: "",
         books: "",
+        logoutError:''
       });
       this.bookList(token);
+      this.props.removeToken();
     } else {
       return this.props.history.push("/");
     }
   }
 
   handleLogout = async () => {
-    const stored_token = localStorage.getItem('token');
-    const data = new FormData()
-    data.append('token',stored_token)
+    const stored_token = localStorage.getItem("token");
+    const data = new FormData();
+    data.append("token", stored_token);
     try {
       let response = await axios({
-        url:'http://127.0.0.1:8000/api/logout/',
-        method:'post',
-        data:data
+        url: "http://127.0.0.1:8000/api/logout/",
+        method: "post",
+        data: data,
       });
-      localStorage.removeItem('token');
-      localStorage.removeItem('username');
-      setTimeout(() => {
-        this.props.history.push("/home");
-      }, 2000);
- 
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      this.props.history.push("/home");
+      this.props.isAuthenticated();
     } catch (error) {
-      console.log('the error is',error.response)
-    } 
-  }
+      this.setState({logoutError:'Failed to logout.Try again later.'})
+    }
+  };
 
   render() {
-    const { books, loading, message } = this.state;
+    const { books,logoutError, loading, message } = this.state;
     return (
       <div>
         <Navbar className="book_nav">
@@ -145,13 +149,18 @@ class FeaturedBooks extends React.Component {
               />
             </Navbar.Brand>
           </Link>
-            <Button onClick={this.handleLogout} variant="secondary" className="logout-btn" type="submit">
-              Logout
-            </Button>
+          <Button
+            onClick={this.handleLogout}
+            variant="secondary"
+            className="logout-btn"
+            type="submit"
+          >
+            Logout
+          </Button>
         </Navbar>
-          <div className="book_search">
-            <BookSearch />
-          </div>
+        <div className="book_search">
+          <BookSearch />
+        </div>
         <Container>
           <h3>Recommended books for you:</h3>
           <Spinner
@@ -160,6 +169,7 @@ class FeaturedBooks extends React.Component {
             className={loading ? "spinner-show" : "spinner-hide"}
           />
           <p className="book-message">{message}</p>
+          <div className="register_errors">{logoutError}</div>
           <Row>
             {books[0]}
             {books[1]}
